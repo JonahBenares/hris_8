@@ -329,7 +329,7 @@ function getData($conn, $column, $table, $id){
 function getInfo($conn, $column, $table, $id, $value_id){
 	$get = $conn->query("SELECT $column FROM $table WHERE $id = '$value_id'") or die(mysql_error());
 	$fetch = $get->fetch_array();
-	return $fetch[$column];
+	return $fetch[$column] ?? '';
 	
 }
 
@@ -716,7 +716,7 @@ function getCurrentJob($con, $personal_id, $job){
 	if(!empty($job)) {
 		$getCurrent = $con->query("SELECT j_position FROM job_history WHERE personal_id = '$personal_id' ORDER BY effective_date DESC LIMIT 1");
 		$fetchCurrent = $getCurrent->fetch_array();
-		$position = $fetchCurrent['j_position'];
+		$position = $fetchCurrent['j_position'] ?? '';
 	}
 	else {
 		$position='';
@@ -749,13 +749,19 @@ function getCurrentBu($con, $personal_id, $bu_id){
 }
 
 function getCurrentSalary($con, $personal_id, $salary){
+	// $salary=0;
 	if(!empty($salary)) {
 		$getCurrent = $con->query("SELECT adjustment, per_day FROM evaluation_history WHERE personal_id = '$personal_id' ORDER BY effective_date DESC LIMIT 1");
 		$fetchCurrent = $getCurrent->fetch_array();
-		if($fetchCurrent['per_day']==''){
-			$salary = $fetchCurrent['adjustment'];
-		}else {
-			$salary = $fetchCurrent['per_day'];
+		$num_rows = $getCurrent->num_rows;
+		if($num_rows!=0){
+			if($fetchCurrent['per_day']==''){
+				$salary = $fetchCurrent['adjustment'];
+			}else {
+				$salary = $fetchCurrent['per_day'];
+			}
+		}else{
+			$salary=getInfo($con, 'salary', 'job_history', 'personal_id', $personal_id);
 		}
 	}
 	else {

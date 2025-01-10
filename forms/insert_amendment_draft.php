@@ -26,11 +26,12 @@
 		}
 
 		if(!empty($_POST['change_namer'])){
-			if(!isset($_POST['counterX1'])){
-				$ctrx1 = $_POST['counter1'];
-			} else {
-				$ctrx1 = $_POST['counterX1'];
-			}
+			// if(!isset($_POST['counterX1'])){
+			// 	$ctrx1 = $_POST['counter1'];
+			// } else {
+			// 	$ctrx1 = $_POST['counterX1'];
+			// }
+			$ctrx1= count($_POST['change_namer']);
 			for($y=0; $y<$ctrx1;$y++){
 				$change_name1 = $_POST['change_namer'][$y];
 				$change_from1 = $_POST['change_frome'][$y];
@@ -69,11 +70,12 @@
 		}
 
 		if(!empty($_POST['change_namer'])){
-			if(!isset($_POST['counterX1'])){
-				$ctrx1 = $_POST['counter1'];
-			} else {
-				$ctrx1 = $_POST['counterX1'];
-			}
+			// if(!isset($_POST['counterX1'])){
+			// 	$ctrx1 = $_POST['counter1'];
+			// } else {
+			// 	$ctrx1 = $_POST['counterX1'];
+			// }
+			$ctrx1= count($_POST['change_namer']);
 			for($y=0; $y<$ctrx1;$y++){
 				$change_name1 = $_POST['change_namer'][$y];
 				$change_from1 = $_POST['change_frome'][$y];

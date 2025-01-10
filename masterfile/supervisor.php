@@ -145,12 +145,13 @@ include('../includes/functions.php');
                                         $sql = mysqli_query($con,"SELECT * FROM personal_data WHERE supervisor = '1' ORDER BY lname ASC")or die(mysqli_error($con));
                                         while ($row=mysqli_fetch_array($sql)){
                                         $personal_id = $row['personal_id'];
+                                        $current_bu=($row['current_bu']!=0) ? $row['current_bu'] : 0;
                                     ?> 
                                     <tr>
                                         <td  hidden> <?php echo $row[ 'personal_id'];?></td>
                                         <td  hidden></td>
                                         <td><?php echo $row['lname'].", ".$row['fname'].", ".$row['mname']." ".$row['name_ext'];?></td>
-                                        <td><?php echo getInfo($con, 'bu_name', 'business_unit', 'bu_id', $row['current_bu']); ?></td>
+                                        <td><?php echo getInfo($con, 'bu_name', 'business_unit', 'bu_id', $current_bu); ?></td>
                                         <td width="10%">
                                             <center >                                               
                                                 <span data-toggle="modal" data-target="#updateCompany">

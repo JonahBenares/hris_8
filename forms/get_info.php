@@ -49,6 +49,6 @@
 		$options .= "<option value='".$rows['personal_id']."' ".(($rows['personal_id']==$current_supervisor)? 'selected' : '').">".$fullname."</option>";
 	}
 
-    $return = array('bday' => date("F d, Y",strtotime($row['bdate'])), 'civil_status' => $row['civil_status'], 'date_hired' => (!empty($fetch_personal['bdate'])) ? date("F d, Y",strtotime($fetch_personal['date_hired'])) : '', 'corporate_name' => $corporate_name, 'sss' => $sss, 'philhealth' => $philhealth, 'pagibig' => $pagibig,'tin' => $tin, 'designation' => $designation,'end_contract' => $end_contract, 'date_reg' => $date_reg, 'department' => $department, 'salary' => $salary, 'allowance' => $allowance, 'emp_status' => $row['emp_status'], 'current_supid' =>  $current_supervisor, 'sup_designation' => strtoupper($sup_designation), 'options'=>$options); 
+    $return = array('bday' => date("F d, Y",strtotime($row['bdate'])), 'civil_status' => $row['civil_status'], 'date_hired' => (!empty($row['date_hired'])) ? date("F d, Y",strtotime($row['date_hired'])) : '', 'corporate_name' => $corporate_name, 'sss' => $sss, 'philhealth' => $philhealth, 'pagibig' => $pagibig,'tin' => $tin, 'designation' => $designation,'end_contract' => $end_contract, 'date_reg' => $date_reg, 'department' => $department, 'salary' => $salary, 'allowance' => $allowance, 'emp_status' => $row['emp_status'], 'current_supid' =>  $current_supervisor, 'sup_designation' => strtoupper($sup_designation), 'options'=>$options); 
     echo json_encode($return);
 ?>

@@ -95,12 +95,22 @@ include('../includes/functions.php');
         var next = $append.clone().find("input").val("").end();
         next.attr('id', 'append' + ii);
         var RmBtn = $('.remAmend', next).length > 0;
+        // next.find("[id]").each(function() {
+        //     const newId = 'change_frome'+ii;
+        //     $(this).attr("id", newId);
+        // });
+        next.find(".change_frome")
+        .val("") // Clear the value
+        .attr("id", "change_frome"+ii);
+
+        next.find(".chfrom")
+        .val("") // Clear the value
+        .attr("id", "chfrom"+ii);
         if (!RmBtn) {
             var rm = "<button type='button' class='btn btn-sm btn-danger remAmend'>x</button>"
             $('.addmoreappend', next).append(rm);
         }
         $append.after(next); 
-
     });
 
     $("body").on("click", ".remAmend", function() {
@@ -265,9 +275,9 @@ include('../includes/functions.php');
                                                     <input type="text"  name="change_namer[]" style="width: 80%">
                                                     <button type="button" class="btn btn-sm btn-primary addChange" id="addChange">+</button>
                                                 </td>
-                                                <td style="padding: 0px">
-                                                    <input type="text" name="change_frome[]" id="change_frome1" style="width: 85%">
-                                                    <button type="button" class="btn btn-sm btn-danger" id="chfrom1">x</button>
+                                                <td style="padding: 0px" id="cf">
+                                                    <input type="text" name="change_frome[]" id="change_frome1" class="change_frome" style="width: 85%">
+                                                    <button type="button" class="btn btn-sm btn-danger chfrom" id="chfrom1" onclick="clearText(this)">x</button>
                                                     <!-- <input type="button" class="btn btn-sm btn-danger" id="chfrom1" value="x"> -->
                                                 </td>
                                                 <td style="padding: 0px"><input type="text" class="form-control" name="change_toe[]"></td>
@@ -512,10 +522,18 @@ include('../includes/functions.php');
     $("#empstat").click(function () {
         document.getElementById("emp_status").value='';
     });
-
-    $("#chfrom1").click(function () {
-        document.getElementById("change_frome1").value='';
-    });
+    
+    // $("#chfrom1").click(function () {
+    //     document.getElementById("change_frome1").value='';
+    // });
+       
+    function clearText(inputId) {
+        // Select the input element by its ID and clear its value
+        const inputField = document.getElementById(inputId);
+        var clear= $(inputId).attr('id');
+        var exp = clear.split("chfrom")
+        document.getElementById("change_frome"+exp[1]).value='';
+    }
 </script>  
 <?php 
 include('../template/footer.php'); 
