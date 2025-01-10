@@ -2,10 +2,23 @@
     //include('header.php');
     include('../includes/connection.php');
     include('../includes/functions.php');
-    require_once('../includes/phpexcel/Classes/PHPExcel/IOFactory.php');
-    $exportfilename="https://cenpripower.com/humanresource/export/custom-report.xlsx";
-    $file = "custom-report";
-    $objPHPExcel = new PHPExcel();
+    require_once('../vendor\autoload.php');
+    // require_once('../includes/phpexcel/Classes/PHPExcel/IOFactory.php');
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
+	use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
+	use PhpOffice\PhpSpreadsheet\Reader\Csv;
+	use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
+	use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
+	use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
+	use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
+	use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
+
+    $exportfilename="../../export/custom-report.xlsx";
+    // $exportfilename="https://cenpripower.com/humanresource/export/custom-report.xlsx";
+    // $file = "custom-report";
+    // $objPHPExcel = new PHPExcel();
+    $objPHPExcel = new Spreadsheet();
+    // $exportfilename="custom-report.xlsx";
 
     if(isset($_POST['pd'])) $pd=$_POST['pd'];
     else $pd="";
@@ -358,7 +371,7 @@
     				$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue($col_count3.$row_count3, $fullname);
     				$objPHPExcel->getActiveSheet()->getStyle($col_count3.$row_count3)->getFont()->setBold(true);
     				$objPHPExcel->getActiveSheet()->mergeCells('A'.$row_count3.":E".$row_count3);
-    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count3.":E".$row_count3)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count3.":E".$row_count3)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
     				$row_count3++;
     				$getSib = $con->query("SELECT * FROM siblings WHERE personal_id = '$fetchName[personal_id]'");
     				while($fetchSib = $getSib->fetch_array()){
@@ -422,7 +435,7 @@
     				$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue($col_count4.$row_count4, $fullname);
     				$objPHPExcel->getActiveSheet()->getStyle($col_count4.$row_count4)->getFont()->setBold(true);
     				$objPHPExcel->getActiveSheet()->mergeCells('A'.$row_count4.":B".$row_count4);
-    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count4.":B".$row_count4)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count4.":B".$row_count4)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
     				$row_count4++;
     				$getChild = $con->query("SELECT * FROM children WHERE personal_id = '$fetchName[personal_id]'");
     				while($fetchChild = $getChild->fetch_array()){
@@ -528,7 +541,7 @@
     				$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue($col_count5.$row_count5, $fullname);
     				$objPHPExcel->getActiveSheet()->getStyle($col_count5.$row_count5)->getFont()->setBold(true);
     				$objPHPExcel->getActiveSheet()->mergeCells('A'.$row_count5.":T".$row_count5);
-    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count5.":T".$row_count5)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count5.":T".$row_count5)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
     				$row_count5++;
     				$getEd = $con->query("SELECT * FROM educational_background WHERE personal_id = '$fetchEduc[personal_id]'");
     				while($fetchEd = $getEd->fetch_array()){
@@ -644,7 +657,7 @@
     				$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue($col_count6.$row_count6, $fullname);
     				$objPHPExcel->getActiveSheet()->getStyle($col_count6.$row_count6)->getFont()->setBold(true);
     				$objPHPExcel->getActiveSheet()->mergeCells('A'.$row_count6.":D".$row_count6);
-    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count6.":D".$row_count6)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count6.":D".$row_count6)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
     				$row_count6++;
     				$getEmp = $con->query("SELECT * FROM employment_history WHERE personal_id = '$fetchName[personal_id]'");
     				while($fetchEmp = $getEmp->fetch_array()){
@@ -712,7 +725,7 @@
     				$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue($col_count7.$row_count7, $fullname);
     				$objPHPExcel->getActiveSheet()->getStyle($col_count7.$row_count7)->getFont()->setBold(true);
     				$objPHPExcel->getActiveSheet()->mergeCells('A'.$row_count7.":E".$row_count7);
-    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count7.":E".$row_count7)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count7.":E".$row_count7)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
     				$row_count7++;
     				$getChar = $con->query("SELECT * FROM character_reference WHERE personal_id = '$fetchName[personal_id]'");
     				while($fetchChar = $getChar->fetch_array()){
@@ -786,7 +799,7 @@
     				$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue($col_count8.$row_count8, $fullname);
     				$objPHPExcel->getActiveSheet()->getStyle($col_count8.$row_count8)->getFont()->setBold(true);
     				$objPHPExcel->getActiveSheet()->mergeCells('A'.$row_count8.":G".$row_count8);
-    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count8.":G".$row_count8)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count8.":G".$row_count8)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
     				$row_count8++;
     				$getJob = $con->query("SELECT * FROM job_history WHERE personal_id = '$fetchName[personal_id]' ORDER BY effective_date DESC");
     				while($fetchJob = $getJob->fetch_array()){
@@ -854,7 +867,7 @@
     				$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue($col_count8.$row_count8, $fullname);
     				$objPHPExcel->getActiveSheet()->getStyle($col_count8.$row_count8)->getFont()->setBold(true);
     				$objPHPExcel->getActiveSheet()->mergeCells('A'.$row_count8.":C".$row_count8);
-    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count8.":C".$row_count8)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    				$objPHPExcel->getActiveSheet()->getStyle('A'.$row_count8.":C".$row_count8)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
     				$row_count8++;
     				$getEval = $con->query("SELECT * FROM evaluation_history WHERE personal_id = '$fetchName[personal_id]'");
     				while($fetchEval = $getEval->fetch_array()){
@@ -875,12 +888,20 @@
 		}
 	}
 	$objPHPExcel->getActiveSheet()->getStyle('A1:'.$col_count.'1')->getFont()->setBold(true);
-	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-	ob_end_clean();
-    // We'll be outputting an excel file
-    header('Content-type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="custom-report.xls"');
-    $objWriter->save('php://output');
+	// $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	// ob_end_clean();
+    // // We'll be outputting an excel file
+    // header('Content-type: application/vnd.ms-excel');
+    // header('Content-Disposition: attachment; filename="custom-report.xls"');
+    // $objWriter->save('php://output');
+ 		
+ 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="custom-report.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
+        ob_get_clean();
+        $objWriter->save('php://output');
+
 	/*if (file_exists($exportfilename))
 			unlink($exportfilename);
 	$objWriter->save(dirname(__FILE__)."/export"."/".$file.".xlsx");

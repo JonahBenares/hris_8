@@ -329,7 +329,7 @@ function getData($conn, $column, $table, $id){
 function getInfo($conn, $column, $table, $id, $value_id){
 	$get = $conn->query("SELECT $column FROM $table WHERE $id = '$value_id'") or die(mysql_error());
 	$fetch = $get->fetch_array();
-	return $fetch[$column];
+	return $fetch[$column] ?? '';
 	
 }
 
@@ -350,7 +350,7 @@ function getSupID($conn,$name){
 function getSupName($conn, $supid){
 	$get = $conn->query("SELECT CONCAT(fname, ' ', mname, ' ', lname, ' ', name_ext) AS fullname FROM personal_data WHERE personal_id = '$supid'");
 	$fetch = $get->fetch_array();
-	return $fetch['fullname'];
+	return $fetch['fullname'] ?? '';
 }
 
 function getGenderCount($con,$dept,$column, $gender){
