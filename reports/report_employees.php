@@ -440,7 +440,7 @@ $getLocation = $con->query("SELECT * FROM location ORDER BY location_name ASC");
                                         </td>
                                         <?php } else { ?>
                                         <td style="text-transform:capitalize;">
-                                            <?php  echo getCurrentJob($con, $row['personal_id'], $rowww['j_position']); ?>
+                                            <?php  echo getCurrentJob($con, $row['personal_id'], $rowww['j_position'] ?? ''); ?>
                                         </td>
                                         <?php } ?>
                                         <td><?php echo $profession; ?></td>

@@ -1,10 +1,23 @@
 <?php
 	include '../includes/connection.php';
 	include('../includes/functions.php');
-    require_once('../includes/phpexcel/Classes/PHPExcel/IOFactory.php');
-    $exportfilename="http://cenpripower.com/HRIS/humanresource/export/employeelist-report.xlsx";
-    $file = "employeelist-report";
-    $objPHPExcel = new PHPExcel();
+	require_once('../vendor\autoload.php');
+    // require_once('../includes/phpexcel/Classes/PHPExcel/IOFactory.php');
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
+	use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
+	use PhpOffice\PhpSpreadsheet\Reader\Csv;
+	use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
+	use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
+	use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
+	use PhpOffice\PhpSpreadsheet\Style\Border as border;
+	use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
+	use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
+
+    // $exportfilename="http://cenpripower.com/HRIS/humanresource/export/employeelist-report.xlsx";
+    $exportfilename="../../export/employeelist-report.xlsx";
+    // $file = "employeelist-report";
+    // $objPHPExcel = new PHPExcel();
+    $objPHPExcel = new Spreadsheet();
 	$keyword = $_GET['keyword'];
 	$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Employee List Report");
     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Fullname");
@@ -107,7 +120,7 @@
     	$styleArray = array(
             'borders' => array(
                 'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                    'style' => border::BORDER_THIN
                 )
             )
         );
@@ -237,7 +250,7 @@
     	$styleArray = array(
             'borders' => array(
                 'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                    'style' => border::BORDER_THIN
                 )
             )
         );
@@ -265,13 +278,13 @@
     $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
     $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($styleArray);
     $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFont()->setBold(true);
-    $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-	ob_end_clean();
+    $objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+	// $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+	// ob_end_clean();
     // We'll be outputting an excel file
-    header('Content-type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="employeelist-report.xlsx"');
-    $objWriter->save('php://output');
+    // header('Content-type: application/vnd.ms-excel');
+    // header('Content-Disposition: attachment; filename="employeelist-report.xlsx"');
+    // $objWriter->save('php://output');
 	/*if (file_exists($exportfilename))
 			unlink($exportfilename);
 	$objWriter->save(dirname(__FILE__)."/export"."/".$file.".xlsx");
@@ -281,4 +294,11 @@
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 	header('Content-Disposition: attachment; filename="employeelist-report.xlsx"');
 	readfile($exportfilename);*/
+
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="employeelist-report.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
+    ob_get_clean();
+    $objWriter->save('php://output');
 ?>

@@ -2,11 +2,24 @@
     //include('header.php');
     include('../includes/connection.php');
     include('../includes/functions.php');
+    require_once('../vendor\autoload.php');
     $today=date('Y-m-d');
-    require_once '../includes/phpexcel/Classes/PHPExcel/IOFactory.php';
-    $exportfilename="http://cenpripower.com/HRIS/humanresource/export/salary-adjustment-summary-".$today.".xlsx";
-    $file = "salary-adjustment-summary-".$today;
-	$objPHPExcel = new PHPExcel();
+    // require_once '../includes/phpexcel/Classes/PHPExcel/IOFactory.php';
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
+	use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
+	use PhpOffice\PhpSpreadsheet\Reader\Csv;
+	use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
+	use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
+	use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
+	use PhpOffice\PhpSpreadsheet\Style\Border as border;
+	use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
+	use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
+
+    // $exportfilename="http://cenpripower.com/HRIS/humanresource/export/salary-adjustment-summary-".$today.".xlsx";
+    $exportfilename="../../export/salary-adjustment-summary-".$today.".xlsx";
+    // $file = "salary-adjustment-summary-".$today;
+	// $objPHPExcel = new PHPExcel();
+	$objPHPExcel = new Spreadsheet();
 	$month=date('Y-m-d');
 	$col_count = 'A';
 	$row_count = 'H';
@@ -201,12 +214,12 @@
 		$sheet_no++;
 	}
 
-	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-	ob_end_clean();
-    // We'll be outputting an excel file
-    header('Content-type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="salary-adjustment-'.$today.'.xlsx"');
-    $objWriter->save('php://output');
+	// $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+	// ob_end_clean();
+    // // We'll be outputting an excel file
+    // header('Content-type: application/vnd.ms-excel');
+    // header('Content-Disposition: attachment; filename="salary-adjustment-'.$today.'.xlsx"');
+    // $objWriter->save('php://output');
 	/*if (file_exists($exportfilename))
 			unlink($exportfilename);
 			$objWriter->save('php://output');
@@ -216,4 +229,11 @@
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 	header('Content-Disposition: attachment; filename="salary-adjustment-'.$today.'.xlsx');
 	readfile($exportfilename);*/
+
+	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="salary-adjustment-'.$today.'.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
+    ob_get_clean();
+    $objWriter->save('php://output');
 ?>
