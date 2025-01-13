@@ -15,7 +15,7 @@
             $data_2 = mysqli_fetch_assoc($result_2);
             $if_previous_disable = '';
             $if_next_disable = '';
-            if($data_1["file_id"] == ""){
+            if($data_1["file_id"] ?? '' == ""){
                 $if_previous_disable = 'disabled';
             }
             if($data_2["file_id"] ?? '' == ""){
