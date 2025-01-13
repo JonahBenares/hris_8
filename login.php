@@ -12,13 +12,9 @@
 			$fetch = $sql->fetch_array();
 			$_SESSION['userid'] = $fetch['user_id'];
 			$_SESSION['username'] = $fetch['username'];
-<<<<<<< HEAD
-			echo "<script>window.location = '../hris_8/masterfile/home.php';</script>";
-			// echo "<script>window.location = '../humanresource/masterfile/home.php';</script>";
-=======
+
 			// echo "<script>window.location = '../humanresource/masterfile/home.php';</script>";
 			echo "<script>window.location = '../hris_8/masterfile/home.php';</script>";
->>>>>>> a6f91701f96f51518e1d118089c9424c41b22032
 		}
 	}
 ?>

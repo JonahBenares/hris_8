@@ -18,14 +18,14 @@
             if($data_1["file_id"] == ""){
                 $if_previous_disable = 'disabled';
             }
-            if($data_2["file_id"] == ""){
+            if($data_2["file_id"] ?? '' == ""){
                 $if_next_disable = 'disabled';
             }
             $output .= '
             <br /><br />
             <div align="center">
-            <button type="button" name="previous" class="btn btn-warning btn-sm previous" id="'.$data_1["file_id"].'" data-personal = "'.$data_1["personal_id"].'" '.$if_previous_disable.'>Previous</button>
-            <button type="button" name="next" class="btn btn-warning btn-sm next" id="'.$data_2["file_id"].'" data-personal = "'.$data_2["personal_id"].'" '.$if_next_disable.'>Next</button>
+            <button type="button" name="previous" class="btn btn-warning btn-sm previous" id="'.$data_1["file_id"] ?? ''.'" data-personal = "'.$data_1["personal_id"] ?? ''.'" '.$if_previous_disable.'>Previous</button>
+            <button type="button" name="next" class="btn btn-warning btn-sm next" id="'.$data_2["file_id"] ?? ''.'" data-personal = "'.$data_2["personal_id"] ?? ''.'" '.$if_next_disable.'>Next</button>
             </div>
             <br /><br />
             ';
