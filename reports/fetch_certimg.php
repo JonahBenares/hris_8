@@ -15,12 +15,24 @@
             $data_2 = mysqli_fetch_assoc($result_2);
             $if_previous_disable = '';
             $if_next_disable = '';
-            if($data_1["file_id"] ?? '' == ""){
+            // if($data_1["file_id"] ?? '' == ""){
+            //     $if_previous_disable = 'disabled';
+            // }
+            // if($data_2["file_id"] ?? '' == ""){
+            //     $if_next_disable = 'disabled';
+            // }
+
+            if (is_null($data_1) || $data_1["file_id"] == "") {
                 $if_previous_disable = 'disabled';
+                $data_1["file_id"] = '';
+                $data_1["personal_id"] = '';
             }
-            if($data_2["file_id"] ?? '' == ""){
+            if (is_null($data_2) || $data_2["file_id"] == "") {
                 $if_next_disable = 'disabled';
+                $data_2["file_id"] = '';
+                $data_2["personal_id"] = '';
             }
+
             $output .= '
             <br /><br />
             <div align="center">
