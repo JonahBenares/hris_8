@@ -4,8 +4,8 @@
 
 	foreach($_POST as $var=>$value)
 	$$var =  $value;
-	$height_esc = mysqli_real_escape_string($con,$_POST['height']);
-	$weight_esc = mysqli_real_escape_string($con,$_POST['weight']);
+	$height_esc = isset($_POST['height']) ? mysqli_real_escape_string($con, $_POST['height']) : '';
+	$weight_esc = isset($_POST['weight']) ? mysqli_real_escape_string($con, $_POST['weight']) : '';
 	$today = date('Y-m-d');
 	$full_post=$fname . " " . $mname . " " . $lname;
 
