@@ -115,8 +115,24 @@
         }
 
         $query=substr($sql,0,-3);
-    	$getPD= $con->query("SELECT * FROM personal_data pd INNER JOIN cities c ON c.id = pd.pre_city INNER JOIN provinces p ON p.id = pd.pre_prov LEFT JOIN family_background fb ON pd.personal_id = fb.personal_id LEFT JOIN evaluation_history eh ON pd.personal_id = eh.personal_id LEFT JOIN employment_history emph ON pd.personal_id = emph.personal_id LEFT JOIN educational_background eb ON pd.personal_id = eb.personal_id LEFT JOIN children ch ON pd.personal_id = ch.personal_id LEFT JOIN character_reference cr ON pd.personal_id = cr.personal_id LEFT JOIN additional_info ai ON pd.personal_id = ai.personal_id LEFT JOIN person_to_contact ptc ON pd.personal_id = ptc.personal_id LEFT JOIN position po ON pd.personal_id = po.personal_id LEFT JOIN siblings si ON pd.personal_id = si.personal_id WHERE ".$query." GROUP BY lname ORDER BY lname ASC");
-    	$num = 3;
+    	// $getPD= $con->query("SELECT * FROM personal_data pd INNER JOIN cities c ON c.id = pd.pre_city INNER JOIN provinces p ON p.id = pd.pre_prov LEFT JOIN family_background fb ON pd.personal_id = fb.personal_id LEFT JOIN evaluation_history eh ON pd.personal_id = eh.personal_id LEFT JOIN employment_history emph ON pd.personal_id = emph.personal_id LEFT JOIN educational_background eb ON pd.personal_id = eb.personal_id LEFT JOIN children ch ON pd.personal_id = ch.personal_id LEFT JOIN character_reference cr ON pd.personal_id = cr.personal_id LEFT JOIN additional_info ai ON pd.personal_id = ai.personal_id LEFT JOIN person_to_contact ptc ON pd.personal_id = ptc.personal_id LEFT JOIN position po ON pd.personal_id = po.personal_id LEFT JOIN siblings si ON pd.personal_id = si.personal_id WHERE ".$query." GROUP BY lname ORDER BY lname ASC");
+    	$getPD= $con->query("SELECT * FROM   personal_data pd
+		LEFT  JOIN cities      c  ON c.id = pd.pre_city
+		LEFT  JOIN provinces   p  ON p.id = pd.pre_prov
+		LEFT  JOIN family_background     fb  ON fb.personal_id  = pd.personal_id
+		LEFT  JOIN evaluation_history    eh  ON eh.personal_id  = pd.personal_id
+		LEFT  JOIN employment_history    emph ON emph.personal_id = pd.personal_id
+		LEFT  JOIN educational_background eb  ON eb.personal_id  = pd.personal_id
+		LEFT  JOIN children              ch  ON ch.personal_id  = pd.personal_id
+		LEFT  JOIN character_reference   cr  ON cr.personal_id  = pd.personal_id
+		LEFT  JOIN additional_info       ai  ON ai.personal_id  = pd.personal_id
+		LEFT  JOIN person_to_contact     ptc ON ptc.personal_id = pd.personal_id
+		LEFT  JOIN position              po  ON po.personal_id  = pd.personal_id
+		LEFT  JOIN siblings              si  ON si.personal_id  = pd.personal_id
+		WHERE ".$query."
+		GROUP BY pd.lname
+		ORDER BY pd.lname ASC");
+		$num = 3;
     	$styleArray = array(
             'borders' => array(
                 'allborders' => array(

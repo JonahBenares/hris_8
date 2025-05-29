@@ -511,10 +511,11 @@ $getLocation = $con->query("SELECT * FROM location ORDER BY location_name ASC");
                                     } else {
                                         foreach(searchEngine($con,$_POST['keyword']) AS $id){
                                             $query1=mysqli_query($con,"SELECT pd.personal_id, pd.lname, pd.fname, pd.mname, pd.name_ext, pd.contact_no,pd.email,pd.emp_num, pd.status, pd.emp_status, p.position_applied, p.date_applied, pd.supervisor, pd.status, pd.current_location,pd.date_hired FROM personal_data pd LEFT JOIN position p ON p.personal_id = pd.personal_id WHERE pd.personal_id = '$id'")or die(mysqli_error($con));
-                                            $row=mysqli_fetch_array($query1); 
-                                            $personal_id = $row['personal_id'];
-                                            $profession = getInfo($con, 'profession', 'additional_info', 'personal_id', $row['personal_id']);
-                                            $fullname = sanitize(utf8_encode($row['lname'].' ,'.$row['fname'].' '.$row['name_ext'].' ,'.$row['mname']));
+                                            $row=mysqli_fetch_array($query1);
+                                            if ($row) {
+                                                    $personal_id = $row['personal_id'];
+                                                    $profession  = getInfo($con, 'profession', 'additional_info', 'personal_id', $personal_id);
+                                                    $fullname = sanitize(utf8_encode($row['lname'].' ,'.$row['fname'].' '.$row['name_ext'].' ,'.$row['mname']));
                                         if($row['supervisor']=='0'){
                                     ?> 
                                     <tr>
@@ -588,7 +589,7 @@ $getLocation = $con->query("SELECT * FROM location ORDER BY location_name ASC");
                                             </center>
                                         </td>
                                     </tr>
-                                    <?php } } } ?>                                        
+                                    <?php } } } }?>                                        
                                 </tbody>
                             </table>  
                         </div>

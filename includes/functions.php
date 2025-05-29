@@ -425,151 +425,217 @@ function getEmpStatusCount($con,$dept,$column, $empstatus){
 	return $rows;
 }
 
-function searchEngine($con, $keyword){
-	$key1=mysqli_real_escape_string($con,$keyword);
-	$x=1;
+// function searchEngine($con, $keyword){
+// 	$key1=mysqli_real_escape_string($con,$keyword);
+// 	$x=1;
+// 	$keyarray = explode(" ", $key1);
+//  	foreach($keyarray AS $key){
+// 		$results=array();
+// 		$getAI= $con->query("SELECT personal_id FROM additional_info WHERE tin LIKE '%$key%' OR sss LIKE '%$key%' OR philhealth LIKE '%$key%' OR pagibig LIKE '%$key%' OR height LIKE '%$key%' OR weight LIKE '%$key%' OR dialect LIKE '%$key%' OR drivers_license LIKE '%$key%' OR date_issued_licensed_number LIKE '%$key%' OR special_skills LIKE '%$key%' OR illness LIKE '%$key%' OR own_bus LIKE '%$key%' OR nature_bus LIKE '%$key%'");
+// 		$rowsAI=$getAI->num_rows;
+// 		if($rowsAI!=0){
+// 			while($fetchAI = $getAI->fetch_array()){
+// 				$results[]=$fetchAI['personal_id'];
+// 			}
+// 		}
+
+// 		$getCR= $con->query("SELECT personal_id FROM character_reference WHERE c_name LIKE '%$key%' OR c_employer LIKE '%$key%' OR c_position LIKE '%$key%' OR c_relationship LIKE '%$key%' OR c_contact_no LIKE '%$key%'");
+// 		$rowsCR=$getCR->num_rows;
+// 		if($rowsCR!=0){
+// 			while($fetchCR = $getCR->fetch_array()){
+// 				$results[]=$fetchCR['personal_id'];
+// 			}
+// 		}
+
+// 		$getCH= $con->query("SELECT personal_id FROM children WHERE child_name LIKE '%$key%' OR child_bday LIKE '%$key%'");
+// 		$rowsCH=$getCH->num_rows;
+// 		if($rowsCH!=0){
+// 			while($fetchCH = $getCH->fetch_array()){
+// 				$results[]=$fetchCH['personal_id'];
+// 			}
+// 		}
+
+// 		$getEB= $con->query("SELECT personal_id FROM educational_background WHERE college LIKE '%$key%' OR course LIKE '%$key%' OR ed_from LIKE '%$key%' OR ed_to LIKE '%$key%' OR date_graduated LIKE '%$key%' OR highschool LIKE '%$key%' OR h_course LIKE '%$key%' OR h_from LIKE '%$key%' OR h_to LIKE '%$key%' OR h_date_graduated LIKE '%$key%' OR elementary LIKE '%$key%' OR e_course LIKE '%$key%' OR e_from LIKE '%$key%' OR e_to LIKE '%$key%' OR e_date_graduated LIKE '%$key%' OR post_grad LIKE '%$key%' OR p_course LIKE '%$key%' OR p_from LIKE '%$key%' OR p_to LIKE '%$key%' OR p_date_graduated LIKE '%$key%'");
+// 		$rowsEB=$getEB->num_rows;
+// 		if($rowsEB!=0){
+// 			while($fetchEB = $getEB->fetch_array()){
+// 				$results[]=$fetchEB['personal_id'];
+// 			}
+// 		}
+
+// 		$getEH= $con->query("SELECT personal_id FROM employment_history WHERE name_address_employer LIKE '%$key%' OR em_position LIKE '%$key%' OR em_from LIKE '%$key%' OR em_to LIKE '%$key%' OR em_remarks LIKE '%$key%'");
+// 		$rowsEH=$getEH->num_rows;
+// 		if($rowsEH!=0){
+// 			while($fetchEH = $getEH->fetch_array()){
+// 				$results[]=$fetchEH['personal_id'];
+// 			}
+// 		}
+
+// 		$getTS= $con->query("SELECT personal_id FROM training_seminars WHERE title LIKE '%$key%' OR venue LIKE '%$key%' OR organizer LIKE '%$key%' OR training_date LIKE '%$key%'");
+// 		$rowsTS=$getTS->num_rows;
+// 		if($rowsTS!=0){
+// 			while($fetchTS = $getTS->fetch_array()){
+// 				$results[]=$fetchTS['personal_id'];
+// 			}
+// 		}
+
+// 		$getEvH= $con->query("SELECT personal_id FROM evaluation_history WHERE eval_date LIKE '%$key%' OR score LIKE '%$key%' OR eval_type LIKE '%$key%'");
+// 		$rowsEvH=$getEvH->num_rows;
+// 		if($rowsEvH!=0){
+// 			while($fetchEvH = $getEvH->fetch_array()){
+// 				$results[]=$fetchEvH['personal_id'];
+// 			}
+// 		}
+
+// 		$getFB= $con->query("SELECT personal_id FROM family_background WHERE father_name LIKE '%$key%' OR occupation LIKE '%$key%' OR mother_name LIKE '%$key%' OR m_occupation LIKE '%$key%' OR name_spouse LIKE '%$key%' OR n_occupation LIKE '%$key%' OR employers_name_address LIKE '%$key%'");
+// 		$rowsFB=$getFB->num_rows;
+// 		if($rowsFB!=0){
+// 			while($fetchFB = $getFB->fetch_array()){
+// 				$results[]=$fetchFB['personal_id'];
+// 			}
+// 		}
+
+// 		$getPD= $con->query("SELECT pd.personal_id FROM personal_data pd INNER JOIN cities c ON c.id = pd.pre_city INNER JOIN provinces p ON p.id = pd.pre_prov WHERE pd.lname LIKE '%$key%' OR pd.fname LIKE '%$key%' OR pd.mname LIKE '%$key%' OR pd.name_ext LIKE '%$key%' OR pd.sex LIKE '%$key%' OR pd.civil_status LIKE '%$key%' OR pd.permanent_address LIKE '%$key%' OR pd.provincial_address LIKE '%$key%' OR pd.place_birth LIKE '%$key%' OR pd.contact_no LIKE '%$key%' OR pd.nationality LIKE '%$key%' OR pd.religion LIKE '%$key%' OR pd.status LIKE '%$key%' OR pd.bio_num LIKE '%$key%' OR pd.emp_num LIKE '%$key%' OR pd.emp_status LIKE '%$key%' OR c.name LIKE '%$key%' OR p.name LIKE '%$key%'");
+// 		$rowsPD=$getPD->num_rows;
+// 		if($rowsPD!=0){
+// 			while($fetchPD = $getPD->fetch_array()){
+// 				$results[]=$fetchPD['personal_id'];
+// 			}
+// 		}
+
+// 		$getPC= $con->query("SELECT personal_id FROM person_to_contact WHERE p_name LIKE '%$key%' OR p_relationship LIKE '%$key%' OR p_contact_no LIKE '%$key%' OR address LIKE '%$key%'");
+// 		$rowsPC=$getPC->num_rows;
+// 		if($rowsPC!=0){
+// 			while($fetchPC = $getPC->fetch_array()){
+// 				$results[]=$fetchPC['personal_id'];
+// 			}
+// 		}
+
+// 		$getPos= $con->query("SELECT personal_id FROM position WHERE position_applied LIKE '%$key%'");
+// 		$rowsPos=$getPos->num_rows;
+// 		if($rowsPos!=0){
+// 			while($fetchPos = $getPos->fetch_array()){
+// 				$results[]=$fetchPos['personal_id'];
+// 			}
+// 		}
+
+// 		$getSib= $con->query("SELECT personal_id FROM siblings WHERE siblings_name LIKE '%$key%' OR siblings_occupation LIKE '%$key%' OR emp_na_add LIKE '%$key%'");
+// 		$rowsSib=$getSib->num_rows;
+// 		if($rowsSib!=0){
+// 			while($fetchSib = $getSib->fetch_array()){
+// 				$results[]=$fetchSib['personal_id'];
+// 			}
+// 		}
+
+// 		$getCert= $con->query("SELECT personal_id FROM certificate WHERE cert_name LIKE '%$key%'");
+// 		$rowsCert=$getCert->num_rows;
+// 		if($rowsCert!=0){
+// 			while($fetchCert = $getCert->fetch_array()){
+// 				$results[]=$fetchCert['personal_id'];
+// 			}
+// 		}
+
+// 		$getEval= $con->query("SELECT personal_id FROM evaluation WHERE eval_period LIKE '%$key%'");
+// 		$rowsEval=$getEval->num_rows;
+// 		if($rowsEval!=0){
+// 			while($fetchEval = $getEval->fetch_array()){
+// 				$results[]=$fetchEval['personal_id'];
+// 			}
+// 		}
+
+// 		$getOther= $con->query("SELECT personal_id FROM other_files WHERE other_name LIKE '%$key%'");
+// 		$rowsOther=$getOther->num_rows;
+// 		if($rowsOther!=0){
+// 			while($fetchOther = $getOther->fetch_array()){
+// 				$results[]=$fetchOther['personal_id'];
+// 			}
+// 		}
+
+// 		$res[]=$results;
+// 	}
+// 	$ct= count($res);
+// 	//echo $ct;
+// 	if($ct==1){
+// 		return array_unique($res[0]);
+// 	} else if($ct==2){
+// 		return array_intersect(array_unique($res[0]), array_unique($res[1]));
+// 	} else if($ct==3){
+// 		return array_intersect(array_unique($res[0]), array_unique($res[1]), array_unique($res[2]));
+// 	} else if($ct==4){
+// 		return array_intersect(array_unique($res[0]), array_unique($res[1]), array_unique($res[2]), array_unique($res[3]));
+// 	} else if($ct==5){
+// 		return array_intersect(array_unique($res[0]), array_unique($res[1]), array_unique($res[2]), array_unique($res[3]), array_unique($res[4]));
+// 	} else if($ct==6){
+// 		return array_intersect(array_unique($res[0]), array_unique($res[1]), array_unique($res[2]), array_unique($res[3]), array_unique($res[4]), array_unique($res[5]));
+// 	}
+// }
+
+function searchEngine($con, $keyword) {
+	$key1 = mysqli_real_escape_string($con, $keyword);
 	$keyarray = explode(" ", $key1);
- 	foreach($keyarray AS $key){
-		$results=array();
-		$getAI= $con->query("SELECT personal_id FROM additional_info WHERE tin LIKE '%$key%' OR sss LIKE '%$key%' OR philhealth LIKE '%$key%' OR pagibig LIKE '%$key%' OR height LIKE '%$key%' OR weight LIKE '%$key%' OR dialect LIKE '%$key%' OR drivers_license LIKE '%$key%' OR date_issued_licensed_number LIKE '%$key%' OR special_skills LIKE '%$key%' OR illness LIKE '%$key%' OR own_bus LIKE '%$key%' OR nature_bus LIKE '%$key%'");
-		$rowsAI=$getAI->num_rows;
-		if($rowsAI!=0){
-			while($fetchAI = $getAI->fetch_array()){
-				$results[]=$fetchAI['personal_id'];
+	$res = [];
+
+	foreach ($keyarray as $key) {
+		$results = [];
+
+		$tables = [
+			"additional_info" => ["tin", "sss", "philhealth", "pagibig", "height", "weight", "dialect", "drivers_license", "date_issued_licensed_number", "special_skills", "illness", "own_bus", "nature_bus"],
+			"character_reference" => ["c_name", "c_employer", "c_position", "c_relationship", "c_contact_no"],
+			"children" => ["child_name", "child_bday"],
+			"educational_background" => ["college", "course", "ed_from", "ed_to", "date_graduated", "highschool", "h_course", "h_from", "h_to", "h_date_graduated", "elementary", "e_course", "e_from", "e_to", "e_date_graduated", "post_grad", "p_course", "p_from", "p_to", "p_date_graduated"],
+			"employment_history" => ["name_address_employer", "em_position", "em_from", "em_to", "em_remarks"],
+			"training_seminars" => ["title", "venue", "organizer", "training_date"],
+			"evaluation_history" => ["eval_date", "score", "eval_type"],
+			"family_background" => ["father_name", "occupation", "mother_name", "m_occupation", "name_spouse", "n_occupation", "employers_name_address"],
+			"personal_data" => ["lname", "fname", "mname", "name_ext", "sex", "civil_status", "permanent_address", "provincial_address", "place_birth", "contact_no", "nationality", "religion", "status", "bio_num", "emp_num", "emp_status"],
+			"person_to_contact" => ["p_name", "p_relationship", "p_contact_no", "address"],
+			"position" => ["position_applied"],
+			"siblings" => ["siblings_name", "siblings_occupation", "emp_na_add"],
+			"certificate" => ["cert_name"],
+			"evaluation" => ["eval_period"],
+			"other_files" => ["other_name"]
+		];
+
+		foreach ($tables as $table => $columns) {
+			$colConditions = array_map(function($col) use ($key) {
+				return "$col LIKE '%$key%'";
+			}, $columns);
+			$where = implode(" OR ", $colConditions);
+			$query = "SELECT personal_id FROM $table WHERE $where";
+			$result = $con->query($query);
+			if ($result && $result->num_rows > 0) {
+				while ($row = $result->fetch_assoc()) {
+					$results[] = $row['personal_id'];
+				}
 			}
 		}
 
-		$getCR= $con->query("SELECT personal_id FROM character_reference WHERE c_name LIKE '%$key%' OR c_employer LIKE '%$key%' OR c_position LIKE '%$key%' OR c_relationship LIKE '%$key%' OR c_contact_no LIKE '%$key%'");
-		$rowsCR=$getCR->num_rows;
-		if($rowsCR!=0){
-			while($fetchCR = $getCR->fetch_array()){
-				$results[]=$fetchCR['personal_id'];
+		// special case for personal_data join with cities and provinces
+		$pdQuery = "SELECT pd.personal_id FROM personal_data pd 
+					INNER JOIN cities c ON c.id = pd.pre_city 
+					INNER JOIN provinces p ON p.id = pd.pre_prov 
+					WHERE pd.lname LIKE '%$key%' OR pd.fname LIKE '%$key%' OR pd.mname LIKE '%$key%' OR pd.name_ext LIKE '%$key%' OR pd.sex LIKE '%$key%' 
+					OR pd.civil_status LIKE '%$key%' OR pd.permanent_address LIKE '%$key%' OR pd.provincial_address LIKE '%$key%' OR pd.place_birth LIKE '%$key%' 
+					OR pd.contact_no LIKE '%$key%' OR pd.nationality LIKE '%$key%' OR pd.religion LIKE '%$key%' OR pd.status LIKE '%$key%' 
+					OR pd.bio_num LIKE '%$key%' OR pd.emp_num LIKE '%$key%' OR pd.emp_status LIKE '%$key%' OR c.name LIKE '%$key%' OR p.name LIKE '%$key%'";
+		$getPD = $con->query($pdQuery);
+		if ($getPD && $getPD->num_rows > 0) {
+			while ($row = $getPD->fetch_assoc()) {
+				$results[] = $row['personal_id'];
 			}
 		}
 
-		$getCH= $con->query("SELECT personal_id FROM children WHERE child_name LIKE '%$key%' OR child_bday LIKE '%$key%'");
-		$rowsCH=$getCH->num_rows;
-		if($rowsCH!=0){
-			while($fetchCH = $getCH->fetch_array()){
-				$results[]=$fetchCH['personal_id'];
-			}
-		}
-
-		$getEB= $con->query("SELECT personal_id FROM educational_background WHERE college LIKE '%$key%' OR course LIKE '%$key%' OR ed_from LIKE '%$key%' OR ed_to LIKE '%$key%' OR date_graduated LIKE '%$key%' OR highschool LIKE '%$key%' OR h_course LIKE '%$key%' OR h_from LIKE '%$key%' OR h_to LIKE '%$key%' OR h_date_graduated LIKE '%$key%' OR elementary LIKE '%$key%' OR e_course LIKE '%$key%' OR e_from LIKE '%$key%' OR e_to LIKE '%$key%' OR e_date_graduated LIKE '%$key%' OR post_grad LIKE '%$key%' OR p_course LIKE '%$key%' OR p_from LIKE '%$key%' OR p_to LIKE '%$key%' OR p_date_graduated LIKE '%$key%'");
-		$rowsEB=$getEB->num_rows;
-		if($rowsEB!=0){
-			while($fetchEB = $getEB->fetch_array()){
-				$results[]=$fetchEB['personal_id'];
-			}
-		}
-
-		$getEH= $con->query("SELECT personal_id FROM employment_history WHERE name_address_employer LIKE '%$key%' OR em_position LIKE '%$key%' OR em_from LIKE '%$key%' OR em_to LIKE '%$key%' OR em_remarks LIKE '%$key%'");
-		$rowsEH=$getEH->num_rows;
-		if($rowsEH!=0){
-			while($fetchEH = $getEH->fetch_array()){
-				$results[]=$fetchEH['personal_id'];
-			}
-		}
-
-		$getTS= $con->query("SELECT personal_id FROM training_seminars WHERE title LIKE '%$key%' OR venue LIKE '%$key%' OR organizer LIKE '%$key%' OR training_date LIKE '%$key%'");
-		$rowsTS=$getTS->num_rows;
-		if($rowsTS!=0){
-			while($fetchTS = $getTS->fetch_array()){
-				$results[]=$fetchTS['personal_id'];
-			}
-		}
-
-		$getEvH= $con->query("SELECT personal_id FROM evaluation_history WHERE eval_date LIKE '%$key%' OR score LIKE '%$key%' OR eval_type LIKE '%$key%'");
-		$rowsEvH=$getEvH->num_rows;
-		if($rowsEvH!=0){
-			while($fetchEvH = $getEvH->fetch_array()){
-				$results[]=$fetchEvH['personal_id'];
-			}
-		}
-
-		$getFB= $con->query("SELECT personal_id FROM family_background WHERE father_name LIKE '%$key%' OR occupation LIKE '%$key%' OR mother_name LIKE '%$key%' OR m_occupation LIKE '%$key%' OR name_spouse LIKE '%$key%' OR n_occupation LIKE '%$key%' OR employers_name_address LIKE '%$key%'");
-		$rowsFB=$getFB->num_rows;
-		if($rowsFB!=0){
-			while($fetchFB = $getFB->fetch_array()){
-				$results[]=$fetchFB['personal_id'];
-			}
-		}
-
-		$getPD= $con->query("SELECT pd.personal_id FROM personal_data pd INNER JOIN cities c ON c.id = pd.pre_city INNER JOIN provinces p ON p.id = pd.pre_prov WHERE pd.lname LIKE '%$key%' OR pd.fname LIKE '%$key%' OR pd.mname LIKE '%$key%' OR pd.name_ext LIKE '%$key%' OR pd.sex LIKE '%$key%' OR pd.civil_status LIKE '%$key%' OR pd.permanent_address LIKE '%$key%' OR pd.provincial_address LIKE '%$key%' OR pd.place_birth LIKE '%$key%' OR pd.contact_no LIKE '%$key%' OR pd.nationality LIKE '%$key%' OR pd.religion LIKE '%$key%' OR pd.status LIKE '%$key%' OR pd.bio_num LIKE '%$key%' OR pd.emp_num LIKE '%$key%' OR pd.emp_status LIKE '%$key%' OR c.name LIKE '%$key%' OR p.name LIKE '%$key%'");
-		$rowsPD=$getPD->num_rows;
-		if($rowsPD!=0){
-			while($fetchPD = $getPD->fetch_array()){
-				$results[]=$fetchPD['personal_id'];
-			}
-		}
-
-		$getPC= $con->query("SELECT personal_id FROM person_to_contact WHERE p_name LIKE '%$key%' OR p_relationship LIKE '%$key%' OR p_contact_no LIKE '%$key%' OR address LIKE '%$key%'");
-		$rowsPC=$getPC->num_rows;
-		if($rowsPC!=0){
-			while($fetchPC = $getPC->fetch_array()){
-				$results[]=$fetchPC['personal_id'];
-			}
-		}
-
-		$getPos= $con->query("SELECT personal_id FROM position WHERE position_applied LIKE '%$key%'");
-		$rowsPos=$getPos->num_rows;
-		if($rowsPos!=0){
-			while($fetchPos = $getPos->fetch_array()){
-				$results[]=$fetchPos['personal_id'];
-			}
-		}
-
-		$getSib= $con->query("SELECT personal_id FROM siblings WHERE siblings_name LIKE '%$key%' OR siblings_occupation LIKE '%$key%' OR emp_na_add LIKE '%$key%'");
-		$rowsSib=$getSib->num_rows;
-		if($rowsSib!=0){
-			while($fetchSib = $getSib->fetch_array()){
-				$results[]=$fetchSib['personal_id'];
-			}
-		}
-
-		$getCert= $con->query("SELECT personal_id FROM certificate WHERE cert_name LIKE '%$key%'");
-		$rowsCert=$getCert->num_rows;
-		if($rowsCert!=0){
-			while($fetchCert = $getCert->fetch_array()){
-				$results[]=$fetchCert['personal_id'];
-			}
-		}
-
-		$getEval= $con->query("SELECT personal_id FROM evaluation WHERE eval_period LIKE '%$key%'");
-		$rowsEval=$getEval->num_rows;
-		if($rowsEval!=0){
-			while($fetchEval = $getEval->fetch_array()){
-				$results[]=$fetchEval['personal_id'];
-			}
-		}
-
-		$getOther= $con->query("SELECT personal_id FROM other_files WHERE other_name LIKE '%$key%'");
-		$rowsOther=$getOther->num_rows;
-		if($rowsOther!=0){
-			while($fetchOther = $getOther->fetch_array()){
-				$results[]=$fetchOther['personal_id'];
-			}
-		}
-
-		$res[]=$results;
-	}
-	$ct= count($res);
-	//echo $ct;
-	if($ct==1){
-		return array_unique($res[0]);
-	} else if($ct==2){
-		return array_intersect(array_unique($res[0]), array_unique($res[1]));
-	} else if($ct==3){
-		return array_intersect(array_unique($res[0]), array_unique($res[1]), array_unique($res[2]));
-	} else if($ct==4){
-		return array_intersect(array_unique($res[0]), array_unique($res[1]), array_unique($res[2]), array_unique($res[3]));
-	} else if($ct==5){
-		return array_intersect(array_unique($res[0]), array_unique($res[1]), array_unique($res[2]), array_unique($res[3]), array_unique($res[4]));
-	} else if($ct==6){
-		return array_intersect(array_unique($res[0]), array_unique($res[1]), array_unique($res[2]), array_unique($res[3]), array_unique($res[4]), array_unique($res[5]));
+		$res[] = $results;
 	}
 
-	
+	// Intersect results for all keywords
+	if (count($res) == 0) return [];
+	$final = $res[0];
+	for ($i = 1; $i < count($res); $i++) {
+		$final = array_intersect($final, $res[$i]);
+	}
+
+	return array_unique($final);
 }
 
 function employeeCount($con){
