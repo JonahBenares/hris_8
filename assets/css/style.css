@@ -8963,3 +8963,69 @@ option{
   margin: 0 auto;
   max-height: 70vh;
 }
+
+/* Spinner animation */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .spinner-border {
+        border: 0.5em solid #f3f3f3;
+        border-top: 0.5em solid #3498db;
+        border-radius: 50%;
+        width: 10rem;
+        height: 10rem;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 10px auto;
+    }
+
+    /* Backdrop blur */
+    .backdrop-blur {
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+
+    /* Fade-in animation */
+    .fade-in {
+        animation: fadeIn 0.8s ease-in-out forwards;
+        opacity: 0;
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+
+    /* Animated checkmark */
+    .check {
+        width: 10rem;
+        height: 10rem;
+        border-radius: 50%;
+        border: 6px solid rgb(14, 245, 122);
+        position: relative;
+        margin: 0 auto 10px auto;
+        animation: popIn 0.4s ease-out forwards;
+    }
+
+    .check::after {
+        content: "";
+        position: absolute;
+        left: 35px;
+        top: 15px;
+        width: 50px;
+        height: 75px;
+        border: solid rgb(14, 245, 122);
+        border-width: 0 6px 6px 0;
+        transform: rotate(45deg);
+        opacity: 0;
+        animation: drawCheck 0.3s 0.4s forwards ease-out;
+    }
+
+    @keyframes popIn {
+        0% { transform: scale(0.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes drawCheck {
+        to { opacity: 1; }
+    }

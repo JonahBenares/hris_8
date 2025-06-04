@@ -59,13 +59,28 @@
         }else{
             var inserts = '';
         }
+        document.getElementById("loader-overlay").style.display = "block";
         $.ajax({
             data: data,
             type: "post",
             url: inserts,
             success: function(output){
                 var op = output.trim();
-                document.location = '../reports/amendment_form_print.php?amend_id='+op;
+                setTimeout(function () {
+                    document.getElementById("savingText").style.display = "none";
+                }, 2000);
+                
+                setTimeout(function () {
+                    document.getElementById("successMessage").style.display = "block";
+                }, 2000);
+                setTimeout(function () {
+                    document.getElementById("loader-overlay").style.display = "none";
+                    document.location = '../reports/amendment_form_print.php?amend_id='+op;
+                }, 5000);
+            },
+            error: function () {
+                document.getElementById("loader-overlay").style.display = "none";
+                alert("An error occurred while saving the record.");
             }
         });
     }
@@ -78,6 +93,7 @@
         }else{
             var inserts = '';
         }
+        document.getElementById("loader-overlay").style.display = "block";
         $.ajax({
             data: data,
             type: "post",
@@ -85,7 +101,21 @@
             success: function(output){
                 //alert(output);
                 var op = output.trim();
-                document.location = '../reports/amendment_form_print.php?amend_id='+op;
+                setTimeout(function () {
+                    document.getElementById("savingText").style.display = "none";
+                }, 2000);
+                
+                setTimeout(function () {
+                    document.getElementById("successMessage").style.display = "block";
+                }, 2000);
+                setTimeout(function () {
+                    document.getElementById("loader-overlay").style.display = "none";
+                    document.location = '../reports/amendment_form_print.php?amend_id='+op;
+                }, 5000);
+            },
+            error: function () {
+                document.getElementById("loader-overlay").style.display = "none";
+                alert("An error occurred while saving the record.");
             }
         });
     }
@@ -119,6 +149,9 @@
 </script>
 <section class="content">
     <div class="content__inner">
+        <?php
+            include('../template/data_alert_success.php');
+        ?>
         <header class="content__title">
             <h1>Amendment Form</h1>
             <small>Welcome to the New HRIS web app experience!</small>

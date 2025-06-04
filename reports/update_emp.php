@@ -34,13 +34,27 @@
     function updateEmp(){
         var data = $("#update-employee").serialize();
         var id=document.getElementById('id').value;
+        document.getElementById("loader-overlay").style.display = "block";
         $.ajax({
             data: data,
             type: "post",
             url: "../reports/update_employee.php",
             success: function(output){
-                //alert(output);
-                document.location = "../reports/form.php?id="+id;              
+                setTimeout(function () {
+                    document.getElementById("savingText").style.display = "none";
+                }, 2000);
+                
+                setTimeout(function () {
+                    document.getElementById("successMessage").style.display = "block";
+                }, 2000);
+                setTimeout(function () {
+                    document.getElementById("loader-overlay").style.display = "none";
+                    document.location = "../reports/form.php?id="+id;  
+                }, 5000);            
+            },
+            error: function () {
+                document.getElementById("loader-overlay").style.display = "none";
+                alert("An error occurred while saving the record.");
             }
         });
     }
@@ -241,6 +255,9 @@
 </script>   
 <section class="content">
     <div class="content__inner">
+        <?php
+            include('../template/data_alert_update.php');
+        ?>
         <header class="content__title m-b-5 p-t-0" style="display:flex">
             <a onclick="goBack()" class="actions__item" title="Back" data-toggle="tooltip" data-placement="bottom">
                 <b>
