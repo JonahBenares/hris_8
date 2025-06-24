@@ -4,7 +4,7 @@
 	foreach($_POST as $var=>$value)
 	$$var = mysqli_real_escape_string($con, $value);
 	$personal_id=$id;
-	$sql=mysqli_query($con,"SELECT * FROM amendment WHERE personal_id = '$personal_id' ORDER BY date_effectivity ASC");
+	$sql = mysqli_query($con, "SELECT * FROM amendment WHERE personal_id = '$personal_id' AND saved = 1 ORDER BY date_effectivity ASC");
 	$num_count = mysqli_num_rows($sql);
 	while($row=mysqli_fetch_array($sql)){
 		$fname=getInfo($con, 'fname', 'personal_data', 'personal_id', $row['personal_id']);
