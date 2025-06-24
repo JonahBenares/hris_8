@@ -25,40 +25,59 @@ $today=date("Y-m-d");
 </style>
 <script src="../assets/vendors/bower_components/jquery/dist/jquery.min.js"></script>
 <script>
-    function addVendor(){
-        var  status = document.getElementById("status").value;
-        var  emp_status = document.getElementById("emp_status").value;
-        if(status == "" ){
-            document.getElementById("status").focus();
-            document.getElementById("errorBox4").innerHTML="Error: Select Status";
-            return false;
-        }else {
-            var data = $("#add-vendor").serialize();
-            var conf = confirm('Are you sure you want to save this record?');
-            if(conf){
-                var inserts = '../reports/insert.php';
-            }else{
-                var inserts = '';
-            }
-            $.ajax({
-                data: data,
-                type: "post",
-                url: inserts,
-                success: function(output){
-                    var op = output.trim();
-                    //alert(op);
-                    if(op!=''){
-                        document.location='../reports/uploadfiles.php?id='+output;
-                    }else if(inserts==''){
-                        document.location = '../reports/app_emp.php';
-                    }else {
-                        alert('Error: Duplicate Entry!');
-                        document.location = '../reports/app_emp.php';
-                    }
-                }
-            });
-        }
+   function addVendor() {
+    var status = document.getElementById("status").value;
+    var emp_status = document.getElementById("emp_status").value;
+
+    // Validate status
+    if (status === "") {
+        document.getElementById("status").focus();
+        document.getElementById("errorBox4").innerHTML = "Error: Select Status";
+        return false;
     }
+
+    var data = $("#add-vendor").serialize();
+    var conf = confirm('Are you sure you want to save this record?');
+
+    var inserts = conf ? '../reports/insert.php' : '';
+
+    // Show loader
+    document.getElementById("loader-overlay").style.display = "block";
+
+    $.ajax({
+        data: data,
+        type: "post",
+        url: inserts,
+        success: function (output) {
+            var op = output.trim();
+            // document.getElementById("savingText").style.display = "none";
+            
+            if (op !== '') {
+                setTimeout(function () {
+                    document.getElementById("savingText").style.display = "none";
+                }, 2000);
+                
+                setTimeout(function () {
+                    document.getElementById("successMessage").style.display = "block";
+                }, 2000);
+                setTimeout(function () {
+                    document.getElementById("loader-overlay").style.display = "none";
+                    document.location = '../reports/uploadfiles.php?id=' + output;
+                }, 5000);
+            } else if (inserts === '') {
+                document.location = '../reports/app_emp.php';
+            } else {
+                alert('Error: Duplicate Entry!');
+                document.location = '../reports/app_emp.php';
+            }
+        },
+        error: function () {
+            document.getElementById("loader-overlay").style.display = "none";
+            alert("An error occurred while saving the record.");
+        }
+    });
+}
+
 </script>
 <script type="text/javascript">
     var ii = 1;
@@ -166,6 +185,9 @@ $today=date("Y-m-d");
 </script>   
 <section class="content">
     <div class="content__inner">
+        <?php
+            include('../template/data_alert_success.php');
+        ?>
         <div class="card" >
             <div class="card-body">
                 <form id ="add-vendor" name = "addvendor" method='POST'>

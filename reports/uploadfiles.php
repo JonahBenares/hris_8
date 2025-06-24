@@ -245,7 +245,7 @@ else{
               frm.append('other_name'+z, other_name);
             }
           }
-
+          document.getElementById("loader-overlay").style.display = "block";
              $.ajax({
               method: 'POST',
               url: "upload.php",
@@ -254,10 +254,25 @@ else{
               processData: false,
               cache: false,
                success: function(output){
-                  alert('Files successfully saved!');
-                  window.location = 'app_emp.php';
-               }
-             
+                  
+                  setTimeout(function () {
+                      document.getElementById("savingText").style.display = "none";
+                  }, 2000);
+                  
+                  setTimeout(function () {
+                      document.getElementById("successMessage").style.display = "block";
+                  }, 2000);
+                  setTimeout(function () {
+                      document.getElementById("loader-overlay").style.display = "none";
+                      window.location = 'app_emp.php';
+                  }, 5000);
+                  // alert('Files successfully saved!');
+                  // window.location = 'app_emp.php';
+               },
+                error: function () {
+                  document.getElementById("loader-overlay").style.display = "none";
+                  alert("An error occurred during upload.");
+              }
              });
           }
         
@@ -356,6 +371,9 @@ $(function() {
 </style>
 <section class="content">
     <div class="content__inner">
+        <?php
+            include('../template/file_alert_success.php');
+        ?>
         <div class="card" >
           <div class="card-header">
                 <h5 class="m-b-0">UPLOAD FILES</h5>

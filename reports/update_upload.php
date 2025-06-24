@@ -245,7 +245,8 @@ function showFileSize() {
         }
 
         var id = document.getElementById('id').value;
-        $(".form_container").append("<div class='sub'><h4>Loading. Please wait...</h4></div>")
+        $(".form_container").append("<div class='sub'><h4>Loading. Please wait...</h4></div>");
+        document.getElementById("loader-overlay").style.display = "block";
         $.ajax({
             method: 'POST',
             url: "../reports/updatefiles.php",
@@ -255,9 +256,24 @@ function showFileSize() {
             cache: false,
             success: function(output){
                 //alert(output);
-                alert('File/s successfully updated!');
-                window.location ='view_upload.php?id='+id;
-            } 
+                setTimeout(function () {
+                    document.getElementById("savingText").style.display = "none";
+                }, 2000);
+                
+                setTimeout(function () {
+                    document.getElementById("successMessage").style.display = "block";
+                }, 2000);
+                setTimeout(function () {
+                    document.getElementById("loader-overlay").style.display = "none";
+                    window.location ='view_upload.php?id='+id;
+                }, 5000);
+                // alert('File/s successfully updated!');
+                
+            },
+                error: function () {
+                  document.getElementById("loader-overlay").style.display = "none";
+                  alert("An error occurred during upload.");
+              }
         });
     }
 }
@@ -533,6 +549,9 @@ $(document).ready(function(){
 </style>
 <section class="content">
     <div class="content__inner">
+        <?php
+            include('../template/file_alert_update.php');
+        ?>
         <div class="row">
             <div class="col-lg-12">
                 <div id="post_modal" class="modal" tabindex="-1">

@@ -84,15 +84,28 @@
     }
     function saveChanges(){     
         var id = document.getElementById('id').value;
+        document.getElementById("loader-overlay").style.display = "block";
         $.ajax({
             type: "POST",
             url: "migrate-tmp.php",
             data: "id="+id,
             success: function(output){
-              
-              alert('Changes successfully saved!');
-              window.close();
-           }
+                setTimeout(function () {
+                    document.getElementById("savingText").style.display = "none";
+                }, 2000);
+                
+                setTimeout(function () {
+                    document.getElementById("successMessage").style.display = "block";
+                }, 2000);
+                setTimeout(function () {
+                    document.getElementById("loader-overlay").style.display = "none";
+                    window.close();
+                }, 5000);
+            },
+            error: function () {
+                document.getElementById("loader-overlay").style.display = "none";
+                alert("An error occurred while saving the record.");
+            }
         });
     }
 </script>
@@ -100,6 +113,9 @@
 <body onload="refresh()">
 <section class="content content--full" >
     <div class="content__inner">
+        <?php
+            include('../template/data_alert_success.php');
+        ?>
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
