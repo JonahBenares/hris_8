@@ -593,7 +593,9 @@ function searchEngine($con, $keyword) {
 			"siblings" => ["siblings_name", "siblings_occupation", "emp_na_add"],
 			"certificate" => ["cert_name"],
 			"evaluation" => ["eval_period"],
-			"other_files" => ["other_name"]
+			"other_files" => ["other_name"],
+			"job_history" => ["j_position"]
+
 		];
 
 		foreach ($tables as $table => $columns) {

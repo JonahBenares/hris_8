@@ -95,7 +95,7 @@ $getLocation = $con->query("SELECT * FROM location ORDER BY location_name ASC");
        $("#search-position").keyup(function(){
         $.ajax({
         type: "POST",
-        url: "search-position.php",
+        url: "  ",
         data:'keyword='+$(this).val(),
         beforeSend: function(){
           $("#search-position").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
@@ -527,7 +527,22 @@ $getLocation = $con->query("SELECT * FROM location ORDER BY location_name ASC");
                                             </a>
                                         </td>
                                         <td align="center"><?php echo (!empty($row['date_hired'])) ? date("M j, Y",strtotime($row['date_hired'])) : '';?></td>
-                                        <td style="text-transform:capitalize;"><?php echo $row['position_applied'];?></td>
+                                        <td style="text-transform:capitalize;">
+
+                                        <?php
+                                            $sqlii = mysqli_query($con, "SELECT * FROM job_history WHERE personal_id = '$row[personal_id]'");
+                                            $rowww = mysqli_fetch_array($sqlii);
+                                            if(!empty($row['position_applied']) && empty($rowww['j_position'])){
+                                        ?>
+                                        
+                                            <?php  echo getCurrentApplied($con, $row['personal_id'], $row['position_applied']); ?>
+                                        
+                                        <?php } else { ?>
+                                        
+                                            <?php  echo getCurrentJob($con, $row['personal_id'], $rowww['j_position'] ?? ''); ?>
+                                        
+                                        <?php } ?>
+                                        </td>
                                         <td><?php echo $profession; ?></td>
                                         <td><?php echo $row['contact_no'];?></td>
                                         <td><?php echo $row['email'];?></td>
