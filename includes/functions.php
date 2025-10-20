@@ -792,6 +792,32 @@ function getCurrentJob($con, $personal_id, $job){
 	return $position;
 }
 
+function getAmendmentJob($con, $personal_id, $job, $date_prepared) {
+    $position = '';
+
+    if (!empty($job)) {
+        // Query for the latest job before or on the prepared date
+        $query = "
+            SELECT j_position 
+            FROM job_history 
+            WHERE personal_id = '$personal_id'
+              AND effective_date <= '$date_prepared'
+              AND j_position != ''
+            ORDER BY effective_date DESC 
+            LIMIT 1
+        ";
+        $getCurrent = $con->query($query);
+
+        if ($getCurrent && $getCurrent->num_rows > 0) {
+            $fetchCurrent = $getCurrent->fetch_array();
+            $position = $fetchCurrent['j_position'];
+        }
+    }
+
+    return $position;
+}
+
+
 function getCurrentEnddate($con, $personal_id, $job){
 	if(!empty($job)) {
 		$getCurrent = $con->query("SELECT end_date FROM job_history WHERE personal_id = '$personal_id' ORDER BY effective_date DESC LIMIT 1");

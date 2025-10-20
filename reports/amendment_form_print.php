@@ -133,7 +133,7 @@
             $job_history = getInfo($con, 'j_position', 'job_history', 'personal_id',$row['personal_id']);
             $bu_id = getInfo($con, 'bu_id', 'job_history', 'personal_id',$row['personal_id']);
             $buid = getCurrentBu($con, $row['personal_id'],$bu_id);
-            $designation = getCurrentJob($con, $row['personal_id'], $job_history);
+            $designation = getAmendmentJob($con, $row['personal_id'], $job_history, $row['date_prepared']);
             $end_contract = getCurrentEnddate($con, $row['personal_id'], $job_history);
             $emp_status = getInfo($con, 'emp_status', 'personal_data', 'personal_id',$row['personal_id']);
             if($emp_status=='Regular'){

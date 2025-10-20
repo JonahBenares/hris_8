@@ -91,9 +91,11 @@
                     $rowww = mysqli_fetch_array($sqlii);
 			       	$name = sanitize(utf8_encode($fetchPD['lname'].', '.$fetchPD['fname'].', '.$fetchPD['mname'].', '.$fetchPD['name_ext']));
 			       	if(empty($rowww['j_position'])){
-						$position = getPosition($con,$fetchPD['personal_id']);
+						// $position = getPosition($con,$fetchPD['personal_id']);
+						$position = getCurrentJob($con,$fetchPD['personal_id'],$rowww['j_position']);
 			       	}else {
-			       		$position = getCurrentJob($con,$fetchPD['personal_id'],$rowww['j_position']);
+			       		// $position = getCurrentJob($con,$fetchPD['personal_id'],$rowww['j_position']);
+			       		$position = getPosition($con,$fetchPD['personal_id']);
 			       	}
 					$date_hired = $fetchPD['date_hired'];
 					$tenure = getTenure($con,$fetchPD['personal_id'],$month);
