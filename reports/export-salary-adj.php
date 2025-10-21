@@ -2,7 +2,7 @@
     //include('header.php');
     include('../includes/connection.php');
     include('../includes/functions.php');
-    require_once('../vendor\autoload.php');
+    require_once('../vendor/autoload.php');
     $today=date('Y-m-d');
     // require_once '../includes/phpexcel/Classes/PHPExcel/IOFactory.php';
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -242,6 +242,6 @@
     header('Content-Disposition: attachment;filename="salary-adjustment-'.$today.'.xlsx"');
     header('Cache-Control: max-age=0');
     $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
-    ob_get_clean();
+    if (ob_get_length()) ob_end_clean();
     $objWriter->save('php://output');
 ?>
