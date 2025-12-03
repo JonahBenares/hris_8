@@ -2,7 +2,7 @@
     //include('header.php');
     include('../includes/connection.php');
     include('../includes/functions.php');
-    require_once('../vendor\autoload.php');
+    require_once('../vendor/autoload.php');
     $today=date('Y-m-d');
     // require_once '../includes/phpexcel/Classes/PHPExcel/IOFactory.php';
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -90,13 +90,11 @@
 					$sqlii = mysqli_query($con, "SELECT * FROM job_history WHERE personal_id = '$fetchPD[personal_id]' ORDER BY effective_date DESC LIMIT 1");
                     $rowww = mysqli_fetch_array($sqlii);
 			       	$name = sanitize(utf8_encode($fetchPD['lname'].', '.$fetchPD['fname'].', '.$fetchPD['mname'].', '.$fetchPD['name_ext']));
-			       	if(empty($rowww['j_position'])){
-						// $position = getPosition($con,$fetchPD['personal_id']);
-						$position = getCurrentJob($con,$fetchPD['personal_id'],$rowww['j_position']);
-			       	}else {
-			       		// $position = getCurrentJob($con,$fetchPD['personal_id'],$rowww['j_position']);
-			       		$position = getPosition($con,$fetchPD['personal_id']);
-			       	}
+			       	// if(empty($rowww['j_position'])){
+					// 	$position = getCurrentJob($con,$fetchPD['personal_id'],$rowww['j_position']);
+			       	// }else {
+			       	// 	$position = getCurrentJob($con,$fetchPD['personal_id'],$rowww['j_position']);
+			       	// }
 					$date_hired = $fetchPD['date_hired'];
 					$tenure = getTenure($con,$fetchPD['personal_id'],$month);
 					$emp_status = $fetchPD['emp_status'];
@@ -118,6 +116,10 @@
 
 
 					if($count_eval == 1 || $count_eval==0){ 
+
+							$position = getEvalData($con,$fetchPD['personal_id'],'position');
+				            if(empty($position[0])) $position ="";
+				            else $position=$position[0];
 
 							$score = getEvalData($con,$fetchPD['personal_id'],'score');
 				            if(empty($score[0])) $score ="";
@@ -154,6 +156,10 @@
 				    	
 				 	} else if($count_eval>1){
 				 		for($a=0;$a<$count_eval;$a++){
+
+				 			$position = getEvalData($con,$fetchPD['personal_id'],'position');
+				            if(empty($position[$a])) $position ="";
+				            else $position=$position[$a];
 
 				 			$score = getEvalData($con,$fetchPD['personal_id'],'score');
 				            if(empty($score[$a])) $score ="";
@@ -192,7 +198,7 @@
 
 				 			} else {
 				 				$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue("A".$row_count2, "");
-								$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue("B".$row_count2, "");
+								$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue("B".$row_count2, $position);
 								$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue("C".$row_count2, "");
 								$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue("D".$row_count2, "");
 								$objPHPExcel->setActiveSheetIndex($sheet_no)->setCellValue("E".$row_count2, "");
@@ -236,6 +242,6 @@
     header('Content-Disposition: attachment;filename="salary-adjustment-'.$today.'.xlsx"');
     header('Cache-Control: max-age=0');
     $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
-    ob_get_clean();
+    if (ob_get_length()) ob_end_clean();
     $objWriter->save('php://output');
 ?>

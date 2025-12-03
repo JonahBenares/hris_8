@@ -656,68 +656,63 @@ function getMaxEval($con){
 	return $val;
 }
 
-function getEvalData($con,$personal_id,$param){
-	$get = $con->query("SELECT * FROM evaluation_history WHERE personal_id = '$personal_id' ORDER BY evalhist_id ASC");
-	$rows=$get->num_rows;
-	if($rows!=0){
-	while($fetch = $get->fetch_array()){
-		if($param=='score'){
-			if(!empty($fetch['score'])) { $score = $fetch['score']; }
-			else { $score =''; }
-			$eval[]=$score;
-		}
+function getEvalData($con, $personal_id, $param) {
+    $get = $con->query("SELECT * FROM evaluation_history WHERE personal_id = '$personal_id' ORDER BY evalhist_id ASC");
+    $rows = $get->num_rows;
+    $eval = [];
 
-		if($param=='eval_date'){
-			if(!empty($fetch['eval_date'])) { $eval_date = $fetch['eval_date']; }
-			else { $eval_date =''; }
-			$eval[]=$eval_date;
-		}
+    if ($rows != 0) {
+        while ($fetch = $get->fetch_array()) {
+            if ($param == 'score') {
+                $score = !empty($fetch['score']) ? $fetch['score'] : '';
+                $eval[] = $score;
+            }
 
-		if($param=='adjustment'){
-		if(!empty($fetch['adjustment'])) { $adjustment = $fetch['adjustment']; }
-		else { $adjustment =''; }
-			$eval[]=$adjustment;
-		}
+            if ($param == 'eval_date') {
+                $eval_date = !empty($fetch['eval_date']) ? $fetch['eval_date'] : '';
+                $eval[] = $eval_date;
+            }
 
-		if($param=='per_day'){
-		if(!empty($fetch['per_day'])) { $per_day = $fetch['per_day']; }
-		else { $per_day =''; }
-			$eval[]=$per_day;
-		}
+            if ($param == 'adjustment') {
+                $adjustment = !empty($fetch['adjustment']) ? $fetch['adjustment'] : '';
+                $eval[] = $adjustment;
+            }
 
-		if($param=='effective_date'){
-		if(!empty($fetch['effective_date'])) { $effective_date = $fetch['effective_date']; }
-		else { $effective_date =''; }
-			$eval[]=$effective_date;
-		}
-		
-		}
-	} else {
-		if($param=='score'){
-			$eval[]="";
-		}
+            if ($param == 'per_day') {
+                $per_day = !empty($fetch['per_day']) ? $fetch['per_day'] : '';
+                $eval[] = $per_day;
+            }
 
-		if($param=='eval_date'){
-			$eval[]="";
-		}
+            if ($param == 'effective_date') {
+                $effective_date = !empty($fetch['effective_date']) ? $fetch['effective_date'] : '';
+                $eval[] = $effective_date;
+            }
 
-		if($param=='adjustment'){
-		$eval[]="";
-		}
+            if ($param == 'position') {
+                $eval_date = $fetch['eval_date'];
+                $getCurrent = $con->query("
+                    SELECT j_position 
+                    FROM job_history 
+                    WHERE personal_id = '$personal_id' 
+                      AND effective_date <= '$eval_date' 
+                    ORDER BY effective_date DESC 
+                    LIMIT 1
+                ");
+                $fetchCurrent = $getCurrent->fetch_array();
+                $position = $fetchCurrent['j_position'] ?? '';
+                $eval[] = $position;
+            }
+        }
+    } else {
+        // No records found, return empty values
+        if (in_array($param, ['score', 'eval_date', 'adjustment', 'per_day', 'effective_date', 'position'])) {
+            $eval[] = '';
+        }
+    }
 
-		if($param=='per_day'){
-		$eval[]="";
-		}
-
-		if($param=='effective_date'){
-		$eval[]="";
-		}
-		
-
-	}
-
-	return $eval;
+    return $eval;
 }
+
 
 function getEvalperUser($con, $personal_id){
 	$get=$con->query("SELECT evalhist_id FROM evaluation_history WHERE personal_id = '$personal_id'");
