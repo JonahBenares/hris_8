@@ -82,32 +82,35 @@
             document.getElementById("bordersep").classList.add('brd-btm');
         }
     }
-    function saveChanges(){     
-        var id = document.getElementById('id').value;
-        document.getElementById("loader-overlay").style.display = "block";
-        $.ajax({
-            type: "POST",
-            url: "migrate-tmp.php",
-            data: "id="+id,
-            success: function(output){
-                setTimeout(function () {
-                    document.getElementById("savingText").style.display = "none";
-                }, 2000);
-                
-                setTimeout(function () {
-                    document.getElementById("successMessage").style.display = "block";
-                }, 2000);
-                setTimeout(function () {
-                    document.getElementById("loader-overlay").style.display = "none";
-                    window.close();
-                }, 5000);
-            },
-            error: function () {
+
+function saveChanges(){     
+    var id = document.getElementById('id').value;
+    document.getElementById("loader-overlay").style.display = "block";
+
+    $.ajax({
+        type: "POST",
+        url: "migrate-tmp.php",
+        data: "id=" + id,
+        success: function(output){
+            setTimeout(function () {
+                document.getElementById("savingText").style.display = "none";
+            }, 2000);
+            
+            setTimeout(function () {
+                document.getElementById("successMessage").style.display = "block";
+            }, 2000);
+
+            setTimeout(function () {
                 document.getElementById("loader-overlay").style.display = "none";
-                alert("An error occurred while saving the record.");
-            }
-        });
-    }
+                
+                // Reload the opener page (report_employees.php)
+                if(window.opener && !window.opener.closed){
+                    window.opener.location.reload();
+                }
+            }, 2000);
+        },
+    });
+}
 </script>
 
 <body onload="refresh()">
