@@ -85,7 +85,7 @@
 
 function saveChanges() {
     var id = $('#id').val();
-    
+
     // Show loader immediately
     $("#loader-overlay").show();
     $("#savingText").show();
@@ -96,20 +96,23 @@ function saveChanges() {
         url: "migrate-tmp.php",
         data: { id: id },
         success: function(output) {
-            // Hide saving text and show success message immediately
-            $("#savingText").fadeOut(300, function() {
-                $("#successMessage").fadeIn(500);
+            // Fade out saving text and show success message
+            $("#savingText").fadeOut(200, function() {
+                $("#successMessage").fadeIn(300, function() {
+
+                    // Hide loader after message is visible
+                    $("#loader-overlay").fadeOut(200, function() {
+
+                        // Reload opener page
+                        if (window.opener && !window.opener.closed) {
+                            window.opener.location.reload();
+                        }
+
+                        // Reload this popup window
+                        location.reload();
+                    });
+                });
             });
-
-            // Hide loader after success message is visible
-            setTimeout(function() {
-                $("#loader-overlay").fadeOut(300);
-
-                // Reload the opener page
-                if (window.opener && !window.opener.closed) {
-                    window.opener.location.reload();
-                }
-            }, 800); // small delay for message visibility
         },
     });
 }
