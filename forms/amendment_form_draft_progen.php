@@ -234,7 +234,8 @@
                                                 <td class="bord-noright" >MARITRAL STATUS</td>
                                                 <td class="bord-noleft">: <span id='status'><?php echo $fetch_personal['civil_status'];?></span></td>
                                                 <td class="bord-noright" >END OF CONTRACT</td>
-                                                <td class="bord-noleft">: <span id='end_contract'><?php echo (!empty($end_contract)) ? date("F d, Y",strtotime($end_contract)) : ''; ?></span></td>
+                                                <!-- <td class="bord-noleft">: <span id='end_contract'><?php echo (!empty($end_contract)) ? date("F d, Y",strtotime($end_contract)) : ''; ?></span></td> -->
+                                                 <td class="bord-noleft">: <span id='end_contract'><?php echo ($emp_status == "Regular")? "-" : ((!empty($end_contract)) ? date("F d, Y", strtotime($end_contract)) : '');?></span></td>
                                             </tr>
                                             <tr>
                                                 <td class="bord-noright" >SSS NUMBER</td>
@@ -546,7 +547,13 @@
                 }else{
                     document.getElementById("date_reg").innerHTML  = '';
                 }
-                document.getElementById("end_contract").innerHTML  = response.end_contract;
+                // document.getElementById("end_contract").innerHTML  = response.end_contract;
+                if (response.emp_status === "Regular") {
+                    document.getElementById("end_contract").innerHTML = "-";
+                } else {
+                    document.getElementById("end_contract").innerHTML = 
+                        response.end_contract ? response.end_contract : "";
+                }
                 document.getElementById("philhealth").innerHTML  = response.philhealth;
                 //document.getElementById("current_supervisor").innerHTML  = response.current_supervisor;
                 document.getElementById("sup_designation").innerHTML  = response.sup_designation;
