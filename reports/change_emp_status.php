@@ -83,31 +83,33 @@
         }
     }
 
-function saveChanges(){     
-    var id = document.getElementById('id').value;
-    document.getElementById("loader-overlay").style.display = "block";
+function saveChanges() {
+    var id = $('#id').val();
+    
+    // Show loader immediately
+    $("#loader-overlay").show();
+    $("#savingText").show();
+    $("#successMessage").hide();
 
     $.ajax({
         type: "POST",
         url: "migrate-tmp.php",
-        data: "id=" + id,
-        success: function(output){
-            setTimeout(function () {
-                document.getElementById("savingText").style.display = "none";
-            }, 2000);
-            
-            setTimeout(function () {
-                document.getElementById("successMessage").style.display = "block";
-            }, 2000);
+        data: { id: id },
+        success: function(output) {
+            // Hide saving text and show success message immediately
+            $("#savingText").fadeOut(300, function() {
+                $("#successMessage").fadeIn(500);
+            });
 
-            setTimeout(function () {
-                document.getElementById("loader-overlay").style.display = "none";
-                
-                // Reload the opener page (report_employees.php)
-                if(window.opener && !window.opener.closed){
+            // Hide loader after success message is visible
+            setTimeout(function() {
+                $("#loader-overlay").fadeOut(300);
+
+                // Reload the opener page
+                if (window.opener && !window.opener.closed) {
                     window.opener.location.reload();
                 }
-            }, 2000);
+            }, 800); // small delay for message visibility
         },
     });
 }
