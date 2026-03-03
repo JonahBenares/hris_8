@@ -1,98 +1,109 @@
 <?php
 include '../includes/connection.php';
+
 if(!empty($_POST["id"])) {
-		$id = $_POST['id'];
-		$gettmp_pd = $con->query("SELECT * FROM tmp_table WHERE personal_id = '$id'");
-		$rows_tmp = $gettmp_pd->num_rows;
-		//echo json_encode($rows_tmp);
-		if($rows_tmp!=0){
-			
-			$fetch_pd = $gettmp_pd->fetch_array();
-			$query="UPDATE personal_data SET ";
-				if(!empty($fetch_pd['status'])) $query .= "status = '$fetch_pd[status]', ";
-				if(!empty($fetch_pd['emp_status'])) $query .= "emp_status = '$fetch_pd[emp_status]', ";
-				if(!empty($fetch_pd['email']))  $query .= "email = '$fetch_pd[email]', ";
-				if(!empty($fetch_pd['emp_num'])) $query .= "emp_num = '$fetch_pd[emp_num]', ";
-				if(!empty($fetch_pd['date_hired'])) $query .= "date_hired = '$fetch_pd[date_hired]', ";
-				if(!empty($fetch_pd['bio_num'])) $query .= "bio_num = '$fetch_pd[bio_num]', ";
-				if(!empty($fetch_pd['date_separated'])) $query .= "date_separated = '$fetch_pd[date_separated]', ";
-				$query=substr($query, 0, -2);
-				$query .= " WHERE personal_id = '$id'";
-				
-				$update=$con->query($query);
-			
-		}
+    $id = $con->real_escape_string($_POST['id']); // sanitize
 
-		$gettmp_jh = $con->query("SELECT * FROM job_history_tmp WHERE personal_id = '$id'");
-		$rows_jh = $gettmp_jh->num_rows;
-		if($rows_jh!=0){
-			while($fetch_jh = $gettmp_jh->fetch_array()){
-				$insertjh = $con->query("INSERT INTO job_history (personal_id, effective_date, emp_status, j_position, department_id, bu_id, location_id, salary, per_day, supervisor, end_date) VALUES ('$fetch_jh[personal_id]', '$fetch_jh[effective_date]', '$fetch_jh[emp_status]','$fetch_jh[j_position]', '$fetch_jh[department_id]', '$fetch_jh[bu_id]', '$fetch_jh[location_id]', '$fetch_jh[salary]', '$fetch_jh[per_day]', '$fetch_jh[supervisor]', '$fetch_jh[end_date]')");
+    // Start transaction
+    $con->begin_transaction();
 
-				/*$update = $con->query("UPDATE personal_data SET current_dept = '$fetch_jh[department_id]', current_bu = '$fetch_jh[bu_id]', currenct_location = '$fetch_jh[location_id]', current_supervisor = '$fetch_jh[supervisor]' WHERE personal_id = '$fetch_jh[personal_id]'");*/
-			}
+    try {
+        // 1️⃣ Update personal_data from tmp_table (only non-empty columns)
+        $gettmp_pd = $con->query("SELECT * FROM tmp_table WHERE personal_id = '$id'");
+        if($gettmp_pd->num_rows > 0) {
+            $fetch_pd = $gettmp_pd->fetch_assoc();
+            $updateFields = [];
 
-		}
+            if(!empty($fetch_pd['status'])) $updateFields[] = "status = '".$con->real_escape_string($fetch_pd['status'])."'";
+            if(!empty($fetch_pd['emp_status'])) $updateFields[] = "emp_status = '".$con->real_escape_string($fetch_pd['emp_status'])."'";
+            if(!empty($fetch_pd['email'])) $updateFields[] = "email = '".$con->real_escape_string($fetch_pd['email'])."'";
+            if(!empty($fetch_pd['emp_num'])) $updateFields[] = "emp_num = '".$con->real_escape_string($fetch_pd['emp_num'])."'";
+            if(!empty($fetch_pd['date_hired'])) $updateFields[] = "date_hired = '".$con->real_escape_string($fetch_pd['date_hired'])."'";
+            if(!empty($fetch_pd['bio_num'])) $updateFields[] = "bio_num = '".$con->real_escape_string($fetch_pd['bio_num'])."'";
+            if(!empty($fetch_pd['date_separated'])) $updateFields[] = "date_separated = '".$con->real_escape_string($fetch_pd['date_separated'])."'";
 
-		$getlatestjob=$con->query("SELECT department_id, bu_id, location_id, supervisor FROM job_history_tmp WHERE personal_id = '$id' ORDER BY effective_date DESC LIMIT 1");
-		$fetchJob = $getlatestjob->fetch_array();
-		$update = "UPDATE personal_data SET ";
-			if(!empty($fetchJob['department_id'])) $update .= "current_dept = '$fetchJob[department_id]', ";
-			if(!empty($fetchJob['bu_id'])) $update .= "current_bu = '$fetchJob[bu_id]', ";
-			if(!empty($fetchJob['location_id']))  $update .= "current_location = '$fetchJob[location_id]', ";
-			if(!empty($fetchJob['supervisor']))  $update .= "current_supervisor = '$fetchJob[supervisor]', ";
-			if(!empty($fetchJob['bu_id']))  $update .= "applied_company = '$fetchJob[bu_id]', ";
-			$update=substr($update, 0, -2);
-			$update .= "  WHERE personal_id = '$id'";
+            if(!empty($updateFields)){
+                $con->query("UPDATE personal_data SET ".implode(", ", $updateFields)." WHERE personal_id = '$id'");
+            }
+        }
 
-			//echo $update;
-			$runupdate=$con->query($update);
-				
+        // 2️⃣ Insert job_history in bulk
+        $con->query("
+            INSERT INTO job_history (personal_id, effective_date, emp_status, j_position, department_id, bu_id, location_id, salary, per_day, supervisor, end_date)
+            SELECT personal_id, effective_date, emp_status, j_position, department_id, bu_id, location_id, salary, per_day, supervisor, end_date
+            FROM job_history_tmp
+            WHERE personal_id = '$id'
+        ");
 
+        // Update latest job info in personal_data
+        $getlatestjob = $con->query("
+            SELECT department_id, bu_id, location_id, supervisor
+            FROM job_history_tmp
+            WHERE personal_id = '$id'
+            ORDER BY effective_date DESC
+            LIMIT 1
+        ");
+        if($getlatestjob->num_rows > 0){
+            $fetchJob = $getlatestjob->fetch_assoc();
+            $updateJobFields = [];
+            if(!empty($fetchJob['department_id'])) $updateJobFields[] = "current_dept = '".$con->real_escape_string($fetchJob['department_id'])."'";
+            if(!empty($fetchJob['bu_id'])) $updateJobFields[] = "current_bu = '".$con->real_escape_string($fetchJob['bu_id'])."'";
+            if(!empty($fetchJob['location_id'])) $updateJobFields[] = "current_location = '".$con->real_escape_string($fetchJob['location_id'])."'";
+            if(!empty($fetchJob['supervisor'])) $updateJobFields[] = "current_supervisor = '".$con->real_escape_string($fetchJob['supervisor'])."'";
+            if(!empty($fetchJob['bu_id'])) $updateJobFields[] = "applied_company = '".$con->real_escape_string($fetchJob['bu_id'])."'";
 
-		$gettmp_eh = $con->query("SELECT * FROM evaluation_history_tmp WHERE personal_id = '$id'");
-		$rows_eh = $gettmp_eh->num_rows;
-		if($rows_eh!=0){
-			while($fetch_eh = $gettmp_eh->fetch_array()){
-				$inserteh = $con->query("INSERT INTO evaluation_history (personal_id, eval_date, score, eval_type, adjustment, per_day, effective_date) VALUES ('$fetch_eh[personal_id]', '$fetch_eh[eval_date]', '$fetch_eh[score]', '$fetch_eh[eval_type]', '$fetch_eh[adjustment]', '$fetch_eh[per_day]', '$fetch_eh[effective_date]')");
-			}
+            if(!empty($updateJobFields)){
+                $con->query("UPDATE personal_data SET ".implode(", ", $updateJobFields)." WHERE personal_id = '$id'");
+            }
+        }
 
-		}
+        // 3️⃣ Bulk insert evaluation_history
+        $con->query("
+            INSERT INTO evaluation_history (personal_id, eval_date, score, eval_type, adjustment, per_day, effective_date)
+            SELECT personal_id, eval_date, score, eval_type, adjustment, per_day, effective_date
+            FROM evaluation_history_tmp
+            WHERE personal_id = '$id'
+        ");
 
-		$gettmp_al = $con->query("SELECT * FROM allowance_tmp WHERE personal_id = '$id'");
-		$rows_al = $gettmp_al->num_rows;
-		if($rows_al!=0){
-			while($fetch_al = $gettmp_al->fetch_array()){
-				$insertal = $con->query("INSERT INTO allowance (personal_id, description, amount) VALUES ('$fetch_al[personal_id]', '$fetch_al[description]', '$fetch_al[amount]')");
-			}
+        // 4️⃣ Bulk insert allowance
+        $con->query("
+            INSERT INTO allowance (personal_id, description, amount)
+            SELECT personal_id, description, amount
+            FROM allowance_tmp
+            WHERE personal_id = '$id'
+        ");
 
-		}
+        // 5️⃣ Bulk insert disciplinary_action
+        $con->query("
+            INSERT INTO disciplinary_action (personal_id, offense_date, offense_type, offense_no, offense_desc, disp_action)
+            SELECT personal_id, offense_date, offense_type, offense_no, offense_desc, disp_action
+            FROM disciplinary_action_tmp
+            WHERE personal_id = '$id'
+        ");
 
-		$gettmp_dp = $con->query("SELECT * FROM disciplinary_action_tmp WHERE personal_id = '$id'");
-		$rows_dp = $gettmp_dp->num_rows;
-		if($rows_dp!=0){
-			while($fetch_dp = $gettmp_dp->fetch_array()){
-				$insertal = $con->query("INSERT INTO disciplinary_action (personal_id, offense_date, offense_type, offense_no, offense_desc, disp_action) VALUES ('$fetch_dp[personal_id]', '$fetch_dp[offense_date]', '$fetch_dp[offense_type]', '$fetch_dp[offense_no]', '$fetch_dp[offense_desc]', '$fetch_dp[disp_action]')");
-			}
+        // 6️⃣ Bulk insert reminders
+        $con->query("
+            INSERT INTO reminders (personal_id, reminder_date, notes)
+            SELECT personal_id, reminder_date, notes
+            FROM reminders_tmp
+            WHERE personal_id = '$id'
+        ");
 
-		}
+        // 7️⃣ Delete tmp tables in bulk
+        $tmpTables = ['tmp_table','job_history_tmp','evaluation_history_tmp','allowance_tmp','disciplinary_action_tmp','reminders_tmp'];
+        foreach($tmpTables as $table){
+            $con->query("DELETE FROM $table WHERE personal_id = '$id'");
+        }
 
-		$gettmp_rem = $con->query("SELECT * FROM reminders_tmp WHERE personal_id = '$id'");
-		$rows_rem = $gettmp_rem->num_rows;
-		if($rows_rem!=0){
-			while($fetch_rem = $gettmp_rem->fetch_array()){
-				$insertrem = $con->query("INSERT INTO reminders (personal_id, reminder_date, notes) VALUES ('$fetch_rem[personal_id]', '$fetch_rem[reminder_date]', '$fetch_rem[notes]')");
-			}
+        // Commit transaction
+        $con->commit();
 
-		}
+        echo "success";
 
-
-		$deletePD = $con->query("DELETE FROM tmp_table WHERE personal_id = '$id'");
-		$deleteJH = $con->query("DELETE FROM job_history_tmp WHERE personal_id = '$id'");
-		$deleteEH = $con->query("DELETE FROM evaluation_history_tmp WHERE personal_id = '$id'");
-		$deleteAL = $con->query("DELETE FROM allowance_tmp WHERE personal_id = '$id'");
-		$deleteDA = $con->query("DELETE FROM disciplinary_action_tmp WHERE personal_id = '$id'");
-		$deleteREM = $con->query("DELETE FROM reminders_tmp WHERE personal_id = '$id'");
-	}
-
+    } catch(Exception $e){
+        $con->rollback();
+        http_response_code(500);
+        echo "Error: ".$e->getMessage();
+    }
+}
 ?>
