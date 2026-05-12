@@ -389,7 +389,7 @@
                                                                 <input type="hidden" class="form-control" id="current_supid" align="center" name="current_supid" value=" <?php echo $current_supervisor; ?>">
                                                             </td> -->
                                                             <td class="nobor" align="center"style="padding: 0px" width="20%">
-                                                                MERRY MICHELLE D. DATO 
+                                                                ERIC D. JABINIAR
                                                             </td>
                                                             <td class="nobor" width="5%"></td>
                                                             <td class="nobor" align="center" style="padding: 0px" width="20%">
@@ -419,7 +419,7 @@
                                                         </tr>
                                                         <tr>
                                                             <!-- <td class="nobor" style="border-top: 1px solid #000" align="center"><?php echo strtoupper($sup_designation); ?></td> -->
-                                                            <td class="nobor" style="border-top: 1px solid #000" align="center">PROGEN ASST. GENERAL MANAGER</td>
+                                                            <td class="nobor" style="border-top: 1px solid #000" align="center">GROUP TECHNICAL DIRECTOR</td>
                                                             <td class="nobor" width="5%"></td>
                                                             <td class="nobor" style="border-top: 1px solid #000;text-transform: uppercase;" align="center"><span id='sup_designation'><?php echo strtoupper($sup_designation); ?></span></td>
                                                             <td class="nobor" width="5%"></td>
