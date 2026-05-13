@@ -199,7 +199,7 @@
             <td class="bor-btm bor-right"><b><?php echo (!empty($rows['date_hired'])) ? date("F d, Y",strtotime($rows['date_hired'])) : ''; ?></b></td>
         </tr>
         <tr>
-            <td class="bor-btm bor-right" >MARITRAL STATUS</td>
+            <td class="bor-btm bor-right" >MARITAL STATUS</td>
             <td class="bor-btm bor-right"><b><?php echo $rows['civil_status'];?></b></td>
             <td class="bor-btm bor-right" >END OF CONTRACT</td>
             <!-- <td class="bor-btm bor-right"><b><?php  echo (!empty($end_contract)) ? date("F d, Y",strtotime($end_contract)) : ''; ?></b></td> -->

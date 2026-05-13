@@ -231,7 +231,7 @@
                                                 <td class="bord-noleft">: <span id='date_hired'><?php echo (!empty($fetch_personal['date_hired'])) ? date("F d, Y",strtotime($fetch_personal['date_hired'])) : ''; ?></span></td>
                                             </tr>
                                             <tr>
-                                                <td class="bord-noright" >MARITRAL STATUS</td>
+                                                <td class="bord-noright" >MARITAL STATUS</td>
                                                 <td class="bord-noleft">: <span id='status'><?php echo $fetch_personal['civil_status'];?></span></td>
                                                 <td class="bord-noright" >END OF CONTRACT</td>
                                                 <!-- <td class="bord-noleft">: <span id='end_contract'><?php echo (!empty($end_contract)) ? date("F d, Y",strtotime($end_contract)) : ''; ?></span></td> -->
