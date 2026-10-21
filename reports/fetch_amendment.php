@@ -11,8 +11,12 @@
 		$lname=getInfo($con, 'lname', 'personal_data', 'personal_id', $row['personal_id']);
 		$fullname=sanitize(utf8_encode($fname." ".$lname));
 ?>
-	<?php if($num_count!=0){ ?>
+	<?php if($num_count!=0 && $row['progen_flag'] == '0'){ ?>
 		<a href="amendment_form_print.php?amend_id=<?php echo $row['amendment_id']; ?>" target="_blank" class="btn btn-sm btn-primary btn-block " style="text-align: left">
+			<p style="margin:0px;font-size: 14px"><b><?php echo $fullname; ?></b> (Amendment Form <b><?php echo $row['date_effectivity']; ?><b>)</p>
+		</a>
+	<?php } else if($num_count!=0 && $row['progen_flag'] == '1') { ?>
+		<a href="amendment_form_print_progen.php?amend_id=<?php echo $row['amendment_id']; ?>" target="_blank" class="btn btn-sm btn-primary btn-block " style="text-align: left">
 			<p style="margin:0px;font-size: 14px"><b><?php echo $fullname; ?></b> (Amendment Form <b><?php echo $row['date_effectivity']; ?><b>)</p>
 		</a>
 	<?php } else { ?>

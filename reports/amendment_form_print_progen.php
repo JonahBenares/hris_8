@@ -199,7 +199,7 @@
             <td class="bor-btm bor-right"><b><?php echo (!empty($rows['date_hired'])) ? date("F d, Y",strtotime($rows['date_hired'])) : ''; ?></b></td>
         </tr>
         <tr>
-            <td class="bor-btm bor-right" >MARITRAL STATUS</td>
+            <td class="bor-btm bor-right" >MARITAL STATUS</td>
             <td class="bor-btm bor-right"><b><?php echo $rows['civil_status'];?></b></td>
             <td class="bor-btm bor-right" >END OF CONTRACT</td>
             <!-- <td class="bor-btm bor-right"><b><?php  echo (!empty($end_contract)) ? date("F d, Y",strtotime($end_contract)) : ''; ?></b></td> -->
@@ -309,7 +309,7 @@
                 <table width="100%" class="nobor-all">
                     <tr>
                         <td class="nobor" align="center"style="padding: 0px" width="20%">
-                            MERRY MICHELLE D. DATO 
+                            ERIC D. JABINIAR
                         </td>
                         <td class="nobor" width="5%"></td>
                         <td class="nobor" align="center" style="padding: 0px;"  width="20%">
@@ -328,7 +328,7 @@
                     </tr>
                     <tr>
                         <!-- <td class="bor-top" align="center">IMMEDIATE/DEPT. HEAD</td> -->
-                        <td class="nobor" style="border-top: 1px solid #000" align="center">PROGEN ASST. GENERAL MANAGER</td>
+                        <td class="nobor" style="border-top: 1px solid #000" align="center">GROUP TECHNICAL DIRECTOR</td>
                         <td class="nobor" width="5%"></td>
                         <td class="bor-top" align="center" style="font-size: 5;text-transform:uppercase"><?php echo strtoupper($sup_designation); ?></td>
                         <td class="nobor" width="5%"></td>

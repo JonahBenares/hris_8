@@ -216,7 +216,7 @@ include('../includes/functions.php');
                                                 <td class="bord-noleft">: <span id='date_hired'></span></td>
                                             </tr>
                                             <tr>
-                                                <td class="bord-noright" >MARITRAL STATUS</td>
+                                                <td class="bord-noright" >MARITAL STATUS</td>
                                                 <td class="bord-noleft">: <span id='status'></span></td>
                                                 <td class="bord-noright" >END OF CONTRACT</td>
                                                 <td class="bord-noleft">: <span id='end_contract'></span></td>

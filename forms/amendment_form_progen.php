@@ -212,7 +212,7 @@ include('../includes/functions.php');
                                                 <td class="bord-noleft">: <span id='date_hired'></span></td>
                                             </tr>
                                             <tr>
-                                                <td class="bord-noright" >MARITRAL STATUS</td>
+                                                <td class="bord-noright" >MARITAL STATUS</td>
                                                 <td class="bord-noleft">: <span id='status'></span></td>
                                                 <td class="bord-noright" >END OF CONTRACT</td>
                                                 <td class="bord-noleft">: <span id='end_contract'></span></td>
@@ -367,7 +367,7 @@ include('../includes/functions.php');
                                                     <table style="width: 100% ">
                                                         <tr>
                                                             <td class="nobor" align="center"style="padding: 0px" width="20%">
-                                                                MERRY MICHELLE D. DATO 
+                                                                ERIC D. JABINIAR
                                                             </td>
                                                             <td class="nobor" width="5%"></td>
                                                             <td class="nobor" align="center" style="padding: 0px" width="20%">
@@ -396,7 +396,7 @@ include('../includes/functions.php');
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="nobor" style="border-top: 1px solid #000" align="center">PROGEN ASST. GENERAL MANAGER</td>
+                                                            <td class="nobor" style="border-top: 1px solid #000" align="center">GROUP TECHNICAL DIRECTOR</td>
                                                             <td class="nobor" width="5%"></td>
                                                             <td class="nobor" style="border-top: 1px solid #000;text-transform: uppercase;" align="center"><span id='sup_designation'></span></td>
                                                             <td class="nobor" width="5%"></td>
